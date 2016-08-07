@@ -1,0 +1,245 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4C163BFC-536F-4622-8D07-3D991C5548B4}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OCD</RootNamespace>
+    <AssemblyName>OCD</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Web.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Deployment">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Helpers">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\ChartJs\js\Chart.js" />
+    <Content Include="Assets\ChartJs\js\Chart.min.js" />
+    <Content Include="Assets\ClipboardJs\js\clipboard.js" />
+    <Content Include="Assets\ClipboardJs\js\clipboard.min.js" />
+    <Content Include="Assets\Custom\img\empty.png" />
+    <Content Include="Assets\Custom\img\na.png" />
+    <Content Include="Assets\Custom\js\unitConverter.js" />
+    <Content Include="Assets\Ion.RangeSlider\css\ion.rangeSlider.css" />
+    <Content Include="Assets\Ion.RangeSlider\css\ion.rangeSlider.skinFlat.css" />
+    <Content Include="Assets\Ion.RangeSlider\css\ion.rangeSlider.skinHTML5.css" />
+    <Content Include="Assets\Ion.RangeSlider\css\ion.rangeSlider.skinModern.css" />
+    <Content Include="Assets\Ion.RangeSlider\css\ion.rangeSlider.skinNice.css" />
+    <Content Include="Assets\Ion.RangeSlider\css\ion.rangeSlider.skinSimple.css" />
+    <Content Include="Assets\Ion.RangeSlider\css\normalize.css" />
+    <Content Include="Assets\Ion.RangeSlider\img\sprite-skin-flat.png" />
+    <Content Include="Assets\Ion.RangeSlider\img\sprite-skin-modern.png" />
+    <Content Include="Assets\Ion.RangeSlider\img\sprite-skin-nice.png" />
+    <Content Include="Assets\Ion.RangeSlider\img\sprite-skin-simple.png" />
+    <Content Include="Assets\Ion.RangeSlider\js\ion.rangeSlider.js" />
+    <Content Include="Assets\Ion.RangeSlider\js\ion.rangeSlider.min.js" />
+    <Content Include="Assets\JQuery\js\jquery-3.1.0.js" />
+    <Content Include="Assets\JQuery\js\jquery-3.1.0.min.js" />
+    <Content Include="Assets\MDB\css\bootstrap.css" />
+    <Content Include="Assets\MDB\css\bootstrap.min.css" />
+    <Content Include="Assets\MDB\css\mdb.css" />
+    <Content Include="Assets\MDB\css\mdb.min.css" />
+    <Content Include="Assets\MDB\css\style.css" />
+    <Content Include="Assets\MDB\img\lightbox\default-skin.png" />
+    <Content Include="Assets\MDB\img\lightbox\default-skin.svg" />
+    <Content Include="Assets\MDB\img\lightbox\preloader.gif" />
+    <Content Include="Assets\MDB\img\overlays\01.png" />
+    <Content Include="Assets\MDB\img\overlays\02.png" />
+    <Content Include="Assets\MDB\img\overlays\03.png" />
+    <Content Include="Assets\MDB\img\overlays\04.png" />
+    <Content Include="Assets\MDB\img\overlays\05.png" />
+    <Content Include="Assets\MDB\img\overlays\06.png" />
+    <Content Include="Assets\MDB\img\overlays\07.png" />
+    <Content Include="Assets\MDB\img\overlays\08.png" />
+    <Content Include="Assets\MDB\img\overlays\09.png" />
+    <Content Include="Assets\MDB\js\bootstrap.js" />
+    <Content Include="Assets\MDB\js\bootstrap.min.js" />
+    <Content Include="Assets\MDB\js\jquery-2.2.3.js" />
+    <Content Include="Assets\MDB\js\jquery-2.2.3.min.js" />
+    <Content Include="Assets\MDB\js\mdb.js" />
+    <Content Include="Assets\MDB\js\mdb.min.js" />
+    <Content Include="Assets\MDB\js\tether.js" />
+    <Content Include="Assets\MDB\js\tether.min.js" />
+    <Content Include="Assets\MDB\MDB License.pdf" />
+    <Content Include="Assets\Moment\js\moment.js" />
+    <Content Include="Assets\WorkerConsole\js\WorkerConsole.js" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Site.css" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Assets\MDB\font\roboto\Roboto-Bold.eot" />
+    <Content Include="Assets\MDB\font\roboto\Roboto-Bold.ttf" />
+    <Content Include="Assets\MDB\font\roboto\Roboto-Bold.woff" />
+    <Content Include="Assets\MDB\font\roboto\Roboto-Bold.woff2" />
+    <Content Include="Assets\MDB\font\roboto\Roboto-Light.eot" />
+    <Content Include="Assets\MDB\font\roboto\Roboto-Light.ttf" />
+    <Content Include="Assets\MDB\font\roboto\Roboto-Light.woff" />
+    <Content Include="Assets\MDB\font\roboto\Roboto-Light.woff2" />
+    <Content Include="Assets\MDB\font\roboto\Roboto-Medium.eot" />
+    <Content Include="Assets\MDB\font\roboto\Roboto-Medium.ttf" />
+    <Content Include="Assets\MDB\font\roboto\Roboto-Medium.woff" />
+    <Content Include="Assets\MDB\font\roboto\Roboto-Medium.woff2" />
+    <Content Include="Assets\MDB\font\roboto\Roboto-Regular.eot" />
+    <Content Include="Assets\MDB\font\roboto\Roboto-Regular.ttf" />
+    <Content Include="Assets\MDB\font\roboto\Roboto-Regular.woff" />
+    <Content Include="Assets\MDB\font\roboto\Roboto-Regular.woff2" />
+    <Content Include="Assets\MDB\font\roboto\Roboto-Thin.eot" />
+    <Content Include="Assets\MDB\font\roboto\Roboto-Thin.ttf" />
+    <Content Include="Assets\MDB\font\roboto\Roboto-Thin.woff" />
+    <Content Include="Assets\MDB\font\roboto\Roboto-Thin.woff2" />
+    <Content Include="Workers\RouteWorker.js" />
+    <Content Include="Assets\ChartJs\js\LICENSE.md" />
+    <None Include="Properties\PublishProfiles\Export.pubxml" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\web.config" />
+    <Content Include="packages.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>3048</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:3048/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Ce projet fait référence à des packages NuGet qui sont manquants sur cet ordinateur. Utilisez l'option de restauration des packages NuGet pour les télécharger. Pour plus d'informations, consultez http://go.microsoft.com/fwlink/?LinkID=322105. Le fichier manquant est : {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
