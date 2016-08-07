@@ -1,0 +1,1641 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>OCD - Open Chffr Dashboard</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css">
+
+    <!-- Bootstrap core CSS -->
+    <link href="/Assets/MDB/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Material Design Bootstrap -->
+    <link href="/Assets/MDB/css/mdb.min.css" rel="stylesheet">
+
+    <!-- JQuery -->
+    <script type="text/javascript" src="/Assets/MDB/js/jquery-2.2.3.min.js"></script>
+
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="/Assets/MDB/js/tether.min.js"></script>
+
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="/Assets/MDB/js/bootstrap.min.js"></script>
+
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="/Assets/MDB/js/mdb.min.js"></script>
+
+    <script type="text/javascript" src="/Assets/Moment/js/moment.js"></script>
+
+    <script type="text/javascript" src="/Assets/Custom/js/unitConverter.js"></script>
+
+    <link href="/Assets/Ion.RangeSlider/css/ion.rangeSlider.css" rel="stylesheet">
+
+    <link href="/Assets/Ion.RangeSlider/css/ion.rangeSlider.skinNice.css" rel="stylesheet">
+
+    <script type="text/javascript" src="/Assets/Ion.RangeSlider/js/ion.rangeSlider.min.js"></script>
+
+    <script type="text/javascript" src="/Assets/ChartJs/js/Chart.min.js"></script>
+
+    <script type="text/javascript" src="/Assets/ClipboardJs/js/clipboard.min.js"></script>
+
+    <style>
+        main {
+            padding-top: 3rem;
+            padding-bottom: 2rem;
+        }
+
+        .widget-wrapper {
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 2rem;
+        }
+
+        .extra-margins {
+            margin-top: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .divider-new {
+            margin-top: 0;
+        }
+
+        .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12 {
+            margin-bottom: 20px;
+        }
+
+
+
+        /* Table scroll from http://fiddle.jshell.net/sschauhan/7h5eaeb6/ */
+
+        table.table-fixedheader {
+            width: 100%;
+        }
+
+            table.table-fixedheader, table.table-fixedheader > thead, table.table-fixedheader > tbody, table.table-fixedheader > thead > tr, table.table-fixedheader > tbody > tr, table.table-fixedheader > thead > tr > th, table.table-fixedheader > tbody > td {
+                display: block;
+            }
+
+                table.table-fixedheader > thead > tr:after, table.table-fixedheader > tbody > tr:after {
+                    content: ' ';
+                    display: block;
+                    visibility: hidden;
+                    clear: both;
+                }
+
+                table.table-fixedheader > tbody {
+                    overflow-y: scroll;
+                    height: 300px;
+                }
+
+                table.table-fixedheader > thead {
+                    overflow-y: scroll;
+                }
+
+                    table.table-fixedheader > thead::-webkit-scrollbar {
+                        background-color: inherit;
+                    }
+
+
+                    table.table-fixedheader > thead > tr > th:after, table.table-fixedheader > tbody > tr > td:after {
+                        content: ' ';
+                        display: table-cell;
+                        visibility: hidden;
+                        clear: both;
+                    }
+
+
+
+                    table.table-fixedheader > thead tr th, table.table-fixedheader > tbody tr td {
+                        float: left;
+                        word-wrap: break-word;
+                    }
+
+        .text-muted {
+            color: #cecece !important;
+        }
+
+        /* ==== Col Width ====*/
+
+        /* Col : # */
+        #tblDrives th:nth-child(1), #tblDrives td:nth-child(1) {
+            width: 3%;
+        }
+
+        /* Col : Date */
+        #tblDrives th:nth-child(2), #tblDrives td:nth-child(2) {
+            width: 21%;
+        }
+
+        /* Col : Distance */
+        #tblDrives th:nth-child(3), #tblDrives td:nth-child(3) {
+            width: 12%;
+        }
+
+        /* Col : Time */
+        #tblDrives th:nth-child(4), #tblDrives td:nth-child(4) {
+            width: 8%;
+        }
+
+        /* Col : Max Speed */
+        #tblDrives th:nth-child(5), #tblDrives td:nth-child(5) {
+            width: 14%;
+        }
+
+        /* Col : Avg Speed */
+        #tblDrives th:nth-child(6), #tblDrives td:nth-child(6) {
+            width: 14%;
+        }
+
+        /* Col : Min Speed */
+        #tblDrives th:nth-child(7), #tblDrives td:nth-child(7) {
+            width: 14%;
+        }
+
+        /* Col : Status */
+        #tblDrives th:nth-child(8), #tblDrives td:nth-child(8) {
+            width: 14%;
+        }
+
+
+
+
+
+
+
+        #playerImg {
+            width: 75%;
+            margin-bottom: 30px;
+        }
+
+        .unit-btn {
+            width: 100%;
+        }
+
+        .irs-line, .irs-bar {
+            cursor: pointer;
+        }
+
+        #tblDrives tbody tr:not(.text-muted) {
+            cursor: pointer;
+        }
+
+        .clickable {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+
+        <!--Navbar-->
+        <nav class="navbar navbar-dark primary-color-dark">
+
+            <!-- Collapse button-->
+            <button class="navbar-toggler hidden-sm-up" type="button" data-toggle="collapse" data-target="#collapseEx">
+                <i class="fa fa-bars"></i>
+            </button>
+
+            <div class="container-fluid">
+
+                <!--Collapse content-->
+                <div class="collapse navbar-toggleable-xs" id="collapseEx">
+                    <!--Navbar Brand-->
+                    <a class="navbar-brand" href="/">OCD</a>
+                    <!--Links-->
+                    <ul class="nav navbar-nav"></ul>
+
+                </div>
+                <!--/.Collapse content-->
+
+            </div>
+
+        </nav>
+        <!--/.Navbar-->
+
+    </header>
+
+    <main>
+
+        <!--Main layout-->
+        <div class="container-fluid">
+            <div class="row">
+
+                <!--Sidebar-->
+                <div class="col-md-3">
+
+                    <div class="widget-wrapper">
+                        <div class="card z-depth-2">
+                            <div class="card-header danger-color-dark white-text">
+                                User
+                                <button class="btn btn-info btn-sm pull-right" style="margin-top: -2px;" id="btnDisconnect"><span class="fa fa-sign-out"></span> Disconnect</button>
+                                <button class="btn btn-info btn-sm pull-right" style="margin-top: -2px;" id="btnShareLnk"><span class="fa fa-link"></span> Share Link</button>
+                            </div>
+                            <div class="card-block">
+                                Username : <span class="lead" id="txtUserName"></span><br />
+                                <span id="txtCommaPoints">-</span> <span style="color: goldenrod;">Comma Points</span>
+                                <hr />
+                                <span id="txtDistanceDriven">-</span> Driven<br />
+                                <span id="txtAvgDistanceDriven">-</span> Average per day<br />
+                                <hr />
+                                <span id="txtTimeDriven">-</span> Uploaded<br />
+                                <span id="txtAvgTimeDriven">-</span> Average per day<br />
+                                <hr />
+                                <span id="txtMaxSpeed">-</span> Max speed<br />
+                                <span id="txtAvgSpeed">-</span> Average speed<br />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="widget-wrapper" style="display: none;">
+                        <div class="card z-depth-2">
+                            <div class="card-header warning-color-dark white-text">
+                                Fun Facts
+                            </div>
+                            <div class="card-block">
+                                <h3>Did you know ?</h3>
+                                <h2>WIP</h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="widget-wrapper">
+                        <div class="card z-depth-2">
+                            <div class="card-header warning-color-dark white-text">
+                                Units
+                            </div>
+                            <div class="card-block">
+                                <div class="card z-depth-2">
+                                    <div class="card-header red darken-4 white-text">
+                                        Distance
+                                    </div>
+                                    <div class="card-block">
+                                        <input type="text" id="inpUnitDist">
+                                    </div>
+
+                                </div>
+
+                                <div class="card z-depth-2">
+                                    <div class="card-header pink darken-4 white-text">
+                                        Speed
+                                    </div>
+                                    <div class="card-block">
+                                        <input type="text" id="inpUnitSpeed">
+                                    </div>
+
+                                </div>
+
+                                <div class="card z-depth-2">
+                                    <div class="card-header purple darken-4 white-text">
+                                        Duration
+                                    </div>
+                                    <div class="card-block">
+                                        <input type="text" id="inpUnitTime">
+                                    </div>
+
+                                </div>
+                                <hr />
+                                <h6>Presets :</h6>
+                                <button class="btn btn-success unit-btn" id="btnUnitPresetSI">SI</button><button class="btn btn-danger unit-btn" id="btnUnitPresetImperial">Imperial</button>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="widget-wrapper">
+                        <div class="card z-depth-2">
+                            <div class="card-header info-color white-text">
+                                Parameters
+                            </div>
+                            <div class="card-block">
+                                <div class="form-group row">
+                                    <label for="inpParseWorker" class="col-md-6 col-form-label"># of Parsing Workers</label>
+                                    <div class="col-md-6">
+                                        <input type="number" id="inpParseWorker" class="form-control" step="1">
+                                    </div>
+                                </div>
+                                <button class="btn btn-info" id="btnCommaTokenModal">Comma Token</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--/.Sidebar-->
+                <!--Main column-->
+                <div class="col-md-9">
+
+                    <!--First row-->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="divider-new">
+                                <h2 class="h2-responsive">Welcome to the Open Comma Dashboard</h2>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="card z-depth-2">
+                                <div class="card-header info-color-dark white-text">
+                                    Drives
+                                    <span class="pull-right"><span id="txtDriveLoadStatus">Initializing</span> - <span id="txtDriveLoadCurrent">-</span>/<span id="txtDriveLoadTot">-</span></span>
+                                </div>
+                                <div class="card-block">
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-striped table-hover table-fixedheader" id="tblDrives">
+                                            <thead class="thead-default">
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Date</th>
+                                                    <th>Distance</th>
+                                                    <th>Time</th>
+                                                    <th>Max Speed</th>
+                                                    <th>Avg Speed</th>
+                                                    <th>Min Speed</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="card z-depth-2">
+                                <div class="card-header default-color white-text">
+                                    Drives Graphs
+                                </div>
+                                <div class="card-block">
+                                    <canvas id="chrtGlobalSpeed" height="450" class="img-thumbnail"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="card-deck-wrapper">
+                                <div class="card-deck">
+                                    <div class="card z-depth-2">
+                                        <div class="card-header success-color-dark white-text">
+                                            Drive Player
+                                        </div>
+                                        <div class="card-block">
+                                            <div class="view hm-black-strong">
+                                                <img id="playerImg" class="z-depth-2 center-block figure-img img-thumbnail" src="/Assets/Custom/img/empty.png" alt="" />
+                                                <div class="mask flex-center" id="playerImgOverlay" style="display: none;">
+                                                    <p class="white-text">Loading ...</p>
+                                                </div>
+                                            </div>
+                                            <p class="text-md-center">
+                                                <span class="fa fa-lg fa-flag-checkered clickable" title="Set as gif start"></span>
+                                                <span class="fa fa-2x fa-fw"></span>
+                                                <span class="fa fa-3x fa-step-backward clickable" title="Step backward" id="btnPrevImg"></span>
+                                                <span class="fa fa-3x fa-fw"></span>
+                                                <span class="fa fa-3x fa-play clickable" title="Play" id="btnPlay"></span>
+                                                <span class="fa fa-3x fa-pause clickable" hidden title="Pause" id="btnPause"></span>
+                                                <span class="fa fa-3x fa-fw"></span>
+                                                <span class="fa fa-3x fa-step-forward clickable" title="Step forward" id="btnNextImg"></span>
+                                                <span class="fa fa-2x fa-fw"></span>
+                                                <span class="fa fa-lg fa-flag-checkered clickable" title="Set as gif end"></span>
+                                            </p>
+                                            <div class="text-md-center">
+                                                <span class="fa fa-fw fa-minus clickable" id="btnSpeedMinus"></span>
+                                                <select id="inpSpeed">
+                                                    <option value="1" selected>1x</option>
+                                                    <option value="1.5">1.5x</option>
+                                                    <option value="2">2x</option>
+                                                    <option value="3">3x</option>
+                                                    <option value="5">5x</option>
+                                                    <option value="8">8x</option>
+                                                    <option value="10">10x</option>
+                                                </select>
+                                                <span class="fa fa-fw fa-plus clickable" id="btnSpeedPlus"></span>
+                                            </div>
+                                            <br />
+                                            <input type="text" id="playerPos" />
+                                            <h5>Gif export (WIP - Not working currently):</h5>
+                                            <input type="text" id="gifPos" />
+                                            <br />
+                                            <button class="btn btn-success">Export</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="card z-depth-2">
+                                        <div class="card-header danger-color-dark white-text">
+                                            Drive Stats
+                                        </div>
+                                        <div class="card-block">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <canvas id="chrtDriveSpeed" height="400" class="img-thumbnail"></canvas>
+                                                </div>
+                                                <div class="col-md-6">Started At :</div>
+                                                <div class="col-md-6"><span id="txtDriveInfoStartDate"></span></div>
+                                                <div class="col-md-6">Ended At :</div>
+                                                <div class="col-md-6"><span id="txtDriveInfoEndDate"></span></div>
+                                                <div class="col-md-6">Min Speed :</div>
+                                                <div class="col-md-6"><span id="txtDriveInfoMinSpeed"></span></div>
+                                                <div class="col-md-6">Max Speed :</div>
+                                                <div class="col-md-6"><span id="txtDriveInfoMaxSpeed"></span></div>
+                                                <div class="col-md-6">Avg Speed :</div>
+                                                <div class="col-md-6"><span id="txtDriveInfoAvgSpeed"></span></div>
+                                                <div class="col-md-6">GPS Points :</div>
+                                                <div class="col-md-6"><span id="txtDriveInfoGPSPoint"></span></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/.Main layout-->
+
+    </main>
+
+    <!--Footer-->
+    <footer class="page-footer center-on-small-only primary-color-dark">
+
+        <!--Call to action-->
+        <div class="call-to-action">
+            <h4>OCD - Open Comma Dashboard</h4>
+            <ul>
+                <li>
+                    <h5><small class="text-muted">This website don't store or send any of your informations. Full source code available at [[Github]]</small></h5>
+                </li>
+            </ul>
+        </div>
+        <!--/.Call to action-->
+        <!--Copyright-->
+        <div class="footer-copyright">
+            <div class="container-fluid">
+                MIT Licence - Rémy GRANDIN (aka scipio)
+            </div>
+        </div>
+        <!--/.Copyright-->
+
+    </footer>
+    <!--/.Footer-->
+
+
+
+
+
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="modal fade" id="connectModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Welcome To OCD</h4>
+                        </div>
+                        <div class="modal-body">
+                            Please connect with the same google account as you connect on comma.
+                            <hr/>
+                            <div class="text-xs-center">
+                                <a class="btn btn-success" id="lnkGoogle">Connect</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="commaTokenModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Comma Token</h4>
+                        </div>
+                        <div class="modal-body">
+                            Here is your comma API token. Be carefull, this token is personal. Anyone who has it can access all your drives, past, present and futur (until you revoke/regenerate the token).
+                            <hr/>
+                            <p id="txtCommaToken" style="word-wrap: break-word;"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="shareLnkModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Comma Token</h4>
+                        </div>
+                        <div class="modal-body">
+                            Here is your OCD share link. Be carefull, anyone who has it can access all your drives, past, present and futur (until you revoke/regenerate the comma token).
+                            <hr/>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="inpLnkShare">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-secondary" type="button" data-clipboard-target="#inpLnkShare" id="btnCopyLnkShare" title="Copy to clipboard">
+                                        <span class="fa fa-clipboard"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var user;
+        window.routes = "";
+
+        function htmlEncode(value) {
+            return $('<div/>').text(value).html();
+        }
+
+        function getURLParam() {
+            var urlParams = {};
+            var queryString = location.hash.substring(1);
+            var regex = /([^&=]+)=([^&]*)/g;
+            var m;
+            while (m = regex.exec(queryString)) {
+                urlParams[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+            }
+            return urlParams;
+        }
+
+        function loadEndPointJSON(service, callback) {
+            callback = callback || $.noop;
+
+            return $.ajax("https://api.comma.ai/v1/" + service, {
+                headers: { 'Authorization': "JWT " + localStorage.getItem("COD.CommaToken") },
+                success: function (data, textStatus, jqXHR) {
+                    callback(data, textStatus, jqXHR);
+                }
+            });
+
+        }
+
+        function commaAuth(callback) {
+            callback = callback || $.noop;
+
+            loadEndPointJSON("auth/?access_token=" + localStorage.getItem("COD.GoogleToken"),
+                function (data, textStatus, jqXHR) {
+                    localStorage.setItem("COD.CommaToken", data.access_token);
+
+                }).always(function (data_jqXHR, textStatus, jqXHR_errorThrown) {
+                    if (textStatus == "error")
+                        callback(false);
+                    else {
+                        if (data_jqXHR.success === false)
+                            callback(false);
+                        else
+                            callback(true);
+                    }
+                });
+        }
+
+        function testCommaToken(callback) {
+            callback = callback || $.noop;
+
+            loadEndPointJSON("me/", function (data, textStatus, jqXHR) {
+
+
+            }).always(function (data_jqXHR, textStatus, jqXHR_errorThrown) {
+                if (textStatus == "error") {
+                    localStorage.setItem("COD.CommaToken", "invalid");
+                    callback(false);
+                }
+                else
+                    callback(true);
+            });
+        }
+
+        function showAuthModal() {
+            // From : https://developers.google.com/identity/protocols/OAuth2UserAgent
+            var params = [
+                "response_type=token",
+                "client_id=" + htmlEncode("606481730191-itkmnv1f1l9arkr1upoj5irkffheevs8.apps.googleusercontent.com"),
+                "scope=" + htmlEncode("https://www.googleapis.com/auth/userinfo.email"),
+                "redirect_uri=" + htmlEncode(window.location.href)
+            ];
+
+            $("#lnkGoogle").attr("href", "https://accounts.google.com/o/oauth2/v2/auth?" + params.join("&"));
+
+            $("#connectModal").modal("show");
+            return;
+
+        }
+
+        function lpad(str, width, padder) {
+            padder = padder || '0';
+            str = str + '';
+            return str.length >= width ? str : new Array(width - str.length + 1).join(padder) + str;
+        }
+
+        function rpad(str, width, padder) {
+            padder = padder || '0';
+            str = str + '';
+            return str.length >= width ? str : str + new Array(width - str.length + 1).join(padder);
+        }
+
+        function roundStr(nb, precision) {
+            precision = precision || 0;
+
+            var mult = Math.pow(10, precision);
+            var res = Math.round(nb * mult) / mult;
+
+            res = res.toFixed(precision);
+
+            return res;
+        }
+
+        // ==== Formating fct ====
+
+        function formatDistance(value, sourceUnit) {
+            value = Converters.convert(value, sourceUnit, units.distance);
+
+            return roundStr(value, 2) + " " + units.distance;
+        };
+        function formatDistanceNoUnit(value, sourceUnit) {
+            value = Converters.convert(value, sourceUnit, units.distance);
+
+            return parseFloat(roundStr(value, 2));
+        };
+
+        function formatSpeed(value, sourceUnit) {
+            value = Converters.convert(value, sourceUnit, units.speed);
+
+            return roundStr(value, 2) + " " + units.speed;
+        };
+
+        function formatSpeedNoUnit(value, sourceUnit) {
+            value = Converters.convert(value, sourceUnit, units.speed);
+
+            return parseFloat(roundStr(value, 2));
+        };
+
+        function formatTime(value, sourceUnit) {
+            value = Converters.convert(value, sourceUnit, units.time);
+
+            if (units.time == "s") {
+                var duration = moment.duration(value, "seconds");
+
+                var durationStr = "";
+
+                if (duration.asDays() > 1)
+                    durationStr += lpad(duration.days(), 2) + "d ";
+
+                if (duration.asHours() > 1)
+                    durationStr += lpad(duration.hours(), 2) + ":";
+
+                durationStr += lpad(duration.minutes(), 2) + ":" + lpad(duration.seconds(), 2);
+
+                return durationStr;
+            } else {
+                return roundStr(value, 2) + " " + units.time;
+            }
+        };
+
+        function formatTimeNoUnit(value, sourceUnit) {
+            value = Converters.convert(value, sourceUnit, units.time);
+
+            return parseFloat(roundStr(value, 2));
+
+        };
+
+        var units = {
+            distance: "km",
+            speed: "km/h",
+            time: "s"
+        }
+
+        //  ==== Route Status ====
+
+        const ROUTE_STATE_WORKER_STARTED = 0;
+        const ROUTE_STATE_DOWNLOAD_STARTED = 1;
+        const ROUTE_STATE_DOWNLOAD_DONE = 2;
+        const ROUTE_STATE_PARSING_STARTED = 3;
+        const ROUTE_STATE_PARSING_DONE = 4;
+        const ROUTE_STATE_GETTING_MAX_IMAGE = 5;
+        const ROUTE_STATE_MAX_IMAGE_FOUND = 6;
+        const ROUTE_STATE_DONE = 7;
+
+        $(function () {
+            // Init
+
+            $("#playerPos").ionRangeSlider({
+                grid: true,
+                prettify: function (num) {
+                    return moment(num, "X").format("HH:mm:ss");
+                },
+                from_shadow: true
+            });
+
+            $("#gifPos").ionRangeSlider({
+                type: "double",
+                grid: true,
+                prettify: function (num) {
+                    return moment(num, "X").format("HH:mm:ss");
+                },
+                from_shadow: true
+            });
+
+            // unit
+
+            if (localStorage.getItem("units-distance") !== null) {
+                units.distance = localStorage.getItem("units-distance");
+            } else {
+                localStorage.setItem("units-distance", units.distance);
+            }
+
+            if (localStorage.getItem("units-speed") !== null) {
+                units.speed = localStorage.getItem("units-speed");
+            } else {
+                localStorage.setItem("units-speed", units.speed);
+            }
+
+            if (localStorage.getItem("units-time") !== null) {
+                units.time = localStorage.getItem("units-time");
+            } else {
+                localStorage.setItem("units-time", units.time);
+            }
+
+            $("#inpUnitDist").val(units.distance);
+            $("#inpUnitSpeed").val(units.speed);
+            $("#inpUnitTime").val(units.time);
+
+
+            $("#inpUnitDist").ionRangeSlider({
+                grid: true,
+                values: [
+                    "m",
+                    "km",
+                    "Golden Gate",
+                    "yd",
+                    "mi"
+                ],
+                hide_min_max: true,
+                hide_from_to: true,
+                onFinish: updateUnits
+            });
+
+            $("#inpUnitSpeed").ionRangeSlider({
+                grid: true,
+                step: 1,
+                values: [
+                    "m/s",
+                    "km/h",
+                    "Golden Gate/Hard Egg",
+                    "yd/h",
+                    "mi/h"
+                ],
+                hide_min_max: true,
+                hide_from_to: true,
+                onFinish: updateUnits
+            });
+
+            $("#inpUnitTime").ionRangeSlider({
+                grid: true,
+                step: 1,
+                values: [
+                    "s",
+                    "Hard Egg"
+                ],
+                hide_min_max: true,
+                hide_from_to: true,
+                onFinish: updateUnits
+            });
+
+            function updateUnits() {
+
+                units.distance = $("#inpUnitDist").val();
+                units.speed = $("#inpUnitSpeed").val();
+                units.time = $("#inpUnitTime").val();
+
+                localStorage.setItem("units-distance", units.distance);
+                localStorage.setItem("units-speed", units.speed);
+                localStorage.setItem("units-time", units.time);
+
+                updateTable();
+                updateGlobalData();
+            }
+
+
+            // ---- Presets ----
+            $("#btnUnitPresetSI").click(function () {
+                $("#inpUnitDist").data("ionRangeSlider").update({ from: 1 });
+                $("#inpUnitSpeed").data("ionRangeSlider").update({ from: 1 });
+                $("#inpUnitTime").data("ionRangeSlider").update({ from: 0 });
+
+                updateUnits();
+            });
+
+            $("#btnUnitPresetImperial").click(function () {
+                $("#inpUnitDist").data("ionRangeSlider").update({ from: 4 });
+                $("#inpUnitSpeed").data("ionRangeSlider").update({ from: 4 });
+                $("#inpUnitTime").data("ionRangeSlider").update({ from: 0 });
+
+                updateUnits();
+            });
+
+
+            // ==== worker nb input ====
+            var workerNb = 10;
+
+            if (localStorage.getItem("workerNb") !== null) {
+                workerNb = localStorage.getItem("workerNb");
+            } else {
+                localStorage.setItem("workerNb", workerNb);
+            }
+
+            $("#inpParseWorker").val(workerNb);
+
+            $("#inpParseWorker").on("input", function () {
+                localStorage.setItem("workerNb", $("#inpParseWorker").val());
+                workerNb = $("#inpParseWorker").val();
+            });
+
+
+
+
+            var urlparams = getURLParam();
+
+            if (typeof urlparams["ct"] != "undefined") {
+                localStorage.setItem("COD.CommaToken", atob(urlparams["ct"]));
+
+                history.replaceState(null, null, "/");
+            }
+
+            if (typeof urlparams["access_token"] != "undefined") {
+                localStorage.setItem("COD.GoogleToken", urlparams["access_token"]);
+
+                history.replaceState(null, null, "/");
+            }
+            testCommaToken(function (result) {
+                if (!result) {
+                    commaAuth(function (result) {
+                        if (!result) {
+                            showAuthModal();
+                        } else {
+                            testCommaToken(function (result) {
+                                if (!result) {
+                                    showAuthModal();
+                                } else
+                                    run();
+                            });
+                        }
+                    });
+                }
+                else
+                    run();
+            });
+
+            var routeIndex = 0;
+            var routeWorkers = [];
+            var routesKeys;
+            var routesKeysOrdered;
+
+            function startRouteWorker(id, startCmd) {
+                let rtIndex = routeIndex--;
+
+
+                if (typeof routesKeys[rtIndex] !== "undefined") {
+                    var worker = new Worker('/Workers/RouteWorker.js');
+
+                    routeWorkers[id] = worker;
+
+                    worker.postMessage({ cmd: "SetId", id: routes[routesKeys[rtIndex]].id });
+
+                    worker.onmessage = function (event) {
+                        switch (event.data.cmd) {
+                            case "setState":
+                                routes[routesKeys[rtIndex]].status = event.data.state;
+                                routes[routesKeys[rtIndex]].statusId = event.data.id;
+                                updateTable();
+                                break;
+                            case "setTime":
+                                routes[routesKeys[rtIndex]].execTime = event.data.time;
+                                break;
+                            case "parsingDone":
+                                $.extend(routes[routesKeys[rtIndex]], event.data.obj);
+                                updateGlobalData();
+                                break;
+                            case "maxPictureFound":
+                                routes[routesKeys[rtIndex]].maxPicture = event.data.obj;
+                                updateGlobalData();
+                                break;
+                            case "done":
+                                rtIndex = routeIndex--;
+
+                                if (typeof routesKeys[rtIndex] !== "undefined") {
+                                    worker.postMessage({
+                                        cmd: startCmd,
+                                        url: routes[routesKeys[rtIndex]].url,
+                                        key: routesKeys[rtIndex],
+                                        pointCount: routes[routesKeys[rtIndex]].duration
+                                    });
+                                } else {
+                                    routeWorkers[id].terminate();
+                                    testStartFindImageWorkers();
+                                }
+                                break;
+                        }
+                    };
+
+                    worker.postMessage({
+                        cmd: startCmd,
+                        url: routes[routesKeys[rtIndex]].url,
+                        key: routesKeys[rtIndex],
+                        pointCount: routes[routesKeys[rtIndex]].duration
+                    });
+                }
+            }
+
+
+            function run() {
+                $("#txtCommaToken").text(localStorage.getItem("COD.CommaToken"));
+
+                    loadEndPointJSON("me/", function (data) {
+                    user = data;
+
+                    $("#txtUserName").text(data.username);
+                    $("#txtCommaPoints").text(data.points);
+                });
+
+                loadEndPointJSON("me/routes/", function (data) {
+                    routes = data.routes;
+
+                    routesKeys = [];
+                    routesKeysOrdered = [];
+
+
+                    let id = 0;
+
+                    $.each(routes, function (index, value) {
+                        routesKeys.push(index);
+                        routesKeysOrdered.push(index);
+                        value.status = "Queued";
+                        value.statusId = -1;
+                        id++;
+
+                        value.date = moment(index, "YYYY-MM-DD--HH-mm-ss");
+                    });
+
+                    routesKeys = routesKeys.sort(function (a, b) { return (a.localeCompare(b)); });
+
+                    for (let i = 0; i < routesKeys.length; i++) {
+                        routes[routesKeys[i]].id = i;
+                    }
+
+                    routeIndex = routesKeys.length - 1;
+
+                    routesKeysOrdered = routesKeys.slice().sort(function (a, b) { return (a.localeCompare(b)) * -1; });
+
+                    updateTable();
+
+
+                    for (let i = 0; i < localStorage.getItem("workerNb") ; i++) {
+                        startRouteWorker(i, "ParseRoute");
+                    }
+                });
+            }
+
+            function updateTable() {
+
+                var doneRoutes = 0;
+                var totRoutes = routesKeys.length;
+
+                $.each(routes, function (index, value) {
+                    if (value.statusId >= ROUTE_STATE_PARSING_DONE)
+                        doneRoutes++;
+                });
+
+                if (doneRoutes != totRoutes)
+                    $("#txtDriveLoadStatus").html('<span class="fa-li fa fa-spinner fa-spin"></span> Loading Routes ...');
+                else
+                    $("#txtDriveLoadStatus").html('<span class="fa-li fa fa-spinner fa-spin"></span> Loading Complete !');
+
+                $("#txtDriveLoadCurrent").text(doneRoutes);
+                $("#txtDriveLoadTot").text(totRoutes);
+
+
+                if ($("#tblDrives tbody").children().length == 0) {
+                    for (let i = 0; i < routesKeysOrdered.length; i++) {
+                        let value = routes[routesKeysOrdered[i]];
+
+                        $("#tblDrives tbody").append('<tr routeId="' + value.id + '">' +
+                                                        '<td></td>' +
+                                                        '<td></td>' +
+                                                        '<td></td>' +
+                                                        '<td></td>' +
+                                                        '<td></td>' +
+                                                        '<td></td>' +
+                                                        '<td></td>' +
+                                                        '<td></td>' +
+                                                      "</tr>");
+                    }
+                }
+
+                for (let i = 0; i < routesKeysOrdered.length; i++) {
+                    let value = routes[routesKeysOrdered[i]];
+
+                    $('#tblDrives tbody tr[routeId="' + value.id + '"]').toggleClass("text-muted", value.statusId < ROUTE_STATE_PARSING_DONE);
+
+
+                    $('#tblDrives tbody tr[routeId="' + value.id + '"] td:nth-child(1)').text(value.id);
+                    $('#tblDrives tbody tr[routeId="' + value.id + '"] td:nth-child(2)').text(value.date.format("YYYY/MM/DD HH:mm:ss"));
+                    $('#tblDrives tbody tr[routeId="' + value.id + '"] td:nth-child(3)').text(value.statusId >= ROUTE_STATE_PARSING_DONE ? formatDistance(value.totalDist, "mi") : formatDistance(value.len, "m"));
+                    $('#tblDrives tbody tr[routeId="' + value.id + '"] td:nth-child(4)').text(value.statusId >= ROUTE_STATE_PARSING_DONE ? formatTime(value.duration, "s") : "-");
+                    $('#tblDrives tbody tr[routeId="' + value.id + '"] td:nth-child(5)').text(value.statusId >= ROUTE_STATE_PARSING_DONE ? formatSpeed(value.maxSpeed, "m/s") : "-");
+                    $('#tblDrives tbody tr[routeId="' + value.id + '"] td:nth-child(6)').text(value.statusId >= ROUTE_STATE_PARSING_DONE ? formatSpeed(value.avgSpeed, "m/s") : "-");
+                    $('#tblDrives tbody tr[routeId="' + value.id + '"] td:nth-child(7)').text(value.statusId >= ROUTE_STATE_PARSING_DONE ? formatSpeed(value.minSpeed, "m/s") : "-");
+                    $('#tblDrives tbody tr[routeId="' + value.id + '"] td:nth-child(8)').text(value.status);
+                };
+            }
+
+            // ==== Graphs ====
+
+            let chrtGlobalSpeed = new Chart($("#chrtGlobalSpeed"), {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [
+
+                        {
+                            type: 'line',
+                            label: "Max Speed",
+                            data: [],
+                            fill: false,
+                            yAxisID: 'y-axis-1',
+                            borderColor: '#c9c900',
+                            backgroundColor: '#c9c900',
+                            pointBorderColor: '#c9c900',
+                            pointBackgroundColor: '#c9c900',
+
+                            hoverBorderColor: '#eaeaa4',
+                            pointHoverBackgroundColor: '#eaeaa4',
+                            pointHoverBorderColor: '#eaeaa4'
+                        },
+                        {
+                            type: 'line',
+                            label: "Duration",
+                            data: [],
+                            fill: false,
+                            yAxisID: 'y-axis-2',
+                            borderColor: '#000080',
+                            backgroundColor: '#000080',
+                            pointBorderColor: '#000080',
+                            pointBackgroundColor: '#000080',
+
+                            hoverBorderColor: '#0000f6',
+                            pointHoverBackgroundColor: '#0000f6',
+                            pointHoverBorderColor: '#0000f6'
+                        },
+                        {
+                            type: 'line',
+                            label: "Distance",
+                            data: [],
+                            fill: false,
+                            yAxisID: 'y-axis-3',
+                            borderColor: '#ff4500',
+                            backgroundColor: '#ff4500',
+                            pointBorderColor: '#ff4500',
+                            pointBackgroundColor: '#ff4500',
+
+                            hoverBorderColor: '#ff6a33',
+                            pointHoverBackgroundColor: '#ff6a33',
+                            pointHoverBorderColor: '#ff6a33'
+                        },
+                        {
+                            type: 'bar',
+                            label: "Avg Speed",
+                            data: [],
+                            fill: false,
+                            yAxisID: 'y-axis-1',
+                            backgroundColor: '#4dc14c',
+                            borderColor: '#4dc14c',
+                            hoverBackgroundColor: '#b2e4b2',
+                            hoverBorderColor: '#b2e4b2'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    tooltips: {
+                        mode: 'label'
+                    },
+                    elements: {
+                        line: {
+                            fill: false
+                        }
+                    },
+                    scales: {
+                        xAxes: [
+                            {
+                                display: true,
+                                gridLines: {
+                                    display: false
+                                },
+                                labels: {
+                                    show: true
+                                }
+                            }
+                        ],
+                        yAxes: [
+                        {
+                            // Speed
+                            type: "linear",
+                            display: true,
+                            position: "left",
+                            id: "y-axis-1",
+                            ticks: {
+                                min: 0,
+                                callback: function (value, index, values) {
+                                    return formatSpeed(value, units.speed);
+                                }
+                            },
+                            labels: {
+                                show: true
+                            },
+                            gridLines: {
+                                display: false
+                            }
+                        },
+                        {
+                            // Duration
+                            type: "linear",
+                            display: true,
+                            position: "right",
+                            id: "y-axis-2",
+                            ticks: {
+                                min: 0,
+                                callback: function (value, index, values) {
+                                    return formatTime(value, units.time);
+                                }
+                            },
+                            labels: {
+                                show: true
+                            },
+                            gridLines: {
+                                display: false
+                            }
+                        },
+                            { // Distance
+                                type: "linear",
+                                display: true,
+                                position: "right",
+                                id: "y-axis-3",
+                                ticks: {
+                                    min: 0,
+                                    callback: function (value, index, values) {
+                                        return formatDistance(value, units.distance);
+                                    }
+                                },
+                                labels: {
+                                    show: true
+                                }
+                            }
+                        ]
+                    }
+                }
+            });
+
+            let chrtDriveSpeed = new Chart($("#chrtDriveSpeed"), {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                            type: 'line',
+                            label: "Speed",
+                            data: [],
+                            fill: false,
+                            yAxisID: 'y-axis-1',
+                            borderColor: '#c9c900',
+                            backgroundColor: '#c9c900',
+                            pointRadius: 0,
+
+                            hoverBorderColor: '#eaeaa4'
+                        },
+                        {
+                            type: 'line',
+                            label: "Distance",
+                            data: [],
+                            fill: false,
+                            yAxisID: 'y-axis-2',
+                            borderColor: '#ff4500',
+                            backgroundColor: '#ff4500',
+
+                            pointRadius: 0,
+
+                            hoverBorderColor: '#ff6a33'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    tooltips: {
+                        mode: 'label'
+                    },
+                    elements: {
+                        line: {
+                            fill: false
+                        }
+                    },
+                    scales: {
+                        xAxes: [
+                            {
+                                display: true,
+                                gridLines: {
+                                    display: false
+                                },
+                                labels: {
+                                    show: true
+                                }
+                            }
+                        ],
+                        yAxes: [
+                        {
+                            // Speed
+                            type: "linear",
+                            display: true,
+                            position: "left",
+                            id: "y-axis-1",
+                            ticks: {
+                                min: 0,
+                                callback: function (value, index, values) {
+                                    return formatSpeed(value, units.speed);
+                                }
+                            },
+                            labels: {
+                                show: true
+                            },
+                            gridLines: {
+                                display: false
+                            }
+                        },
+                            { // Distance
+                                type: "linear",
+                                display: true,
+                                position: "right",
+                                id: "y-axis-2",
+                                ticks: {
+                                    min: 0,
+                                    callback: function (value, index, values) {
+                                        return formatDistance(value, units.distance);
+                                    }
+                                },
+                                labels: {
+                                    show: true
+                                }
+                            }
+                        ]
+                    }
+                }
+            });
+
+            function updateGlobalData() {
+                var doneRoutes = 0;
+                var totRoutes = routesKeys.length;
+
+
+                var totalDist = 0;
+                var totalTime = 0;
+
+                var timeArr = {};
+                var distanceArr = {};
+
+                var weigthSpeedAvgTot = 0;
+                var weigthSpeedAvgCount = 0;
+
+                var maxSpeed = 0;
+
+                $.each(routes, function (index, value) {
+                    if (value.statusId < ROUTE_STATE_PARSING_DONE)
+                        return;
+
+                    doneRoutes++;
+
+                    totalDist += value.totalDist;
+                    totalTime += value.duration;
+
+                    weigthSpeedAvgTot += value.avgSpeed * value.data.length;
+                    weigthSpeedAvgCount += value.data.length;
+
+                    if (value.maxSpeed > maxSpeed)
+                        maxSpeed = value.maxSpeed;
+
+                    let startDate = moment(value.startDate, "YYYY/MM/DD HH:mm:ss");
+                    let endDate = moment(value.endDate, "YYYY/MM/DD HH:mm:ss");
+
+                    if (startDate.date() == endDate.date()) {
+                        if (typeof timeArr[startDate.format("YYYY/MM/DD")] == "undefined")
+                            timeArr[startDate.format("YYYY/MM/DD")] = 0;
+
+                        if (typeof distanceArr[startDate.format("YYYY/MM/DD")] == "undefined")
+                            distanceArr[startDate.format("YYYY/MM/DD")] = 0;
+
+                        timeArr[startDate.format("YYYY/MM/DD")] += value.duration;
+                        distanceArr[startDate.format("YYYY/MM/DD")] += value.totalDist;
+
+                    } else {
+                        for (let i = 0; i < value.data.length; i++) {
+                            var date = moment(value.data[i].date).format("YYYY/MM/DD");
+
+                            if (typeof timeArr[date] == "undefined")
+                                timeArr[date] = 0;
+
+                            if (typeof distanceArr[date] == "undefined")
+                                distanceArr[date] = 0;
+
+                            timeArr[date] += 1;
+
+                            if (typeof value.data[i - 1] != "undefined")
+                                distanceArr[startDate.format("YYYY/MM/DD")] += value.data[i].dist - value.data[i - 1].dist;
+                        }
+                    }
+                });
+
+                $("#txtDistanceDriven").text(formatDistance(totalDist, "mi"));
+                $("#txtTimeDriven").text(formatTime(totalTime, "s"));
+
+                $("#txtMaxSpeed").text(formatSpeed(maxSpeed, "m/s"));
+                $("#txtAvgSpeed").text(formatSpeed(weigthSpeedAvgTot / weigthSpeedAvgCount, "m/s"));
+
+                var timeSum = 0;
+
+                $.each(timeArr, function (index, value) {
+                    timeSum += value;
+                });
+
+                var distanceSum = 0;
+
+                $.each(distanceArr, function (index, value) {
+                    distanceSum += value;
+                });
+
+                $("#txtAvgDistanceDriven").text(formatDistance(distanceSum / Object.keys(distanceArr).length, "mi"));
+                $("#txtAvgTimeDriven").text(formatTime(timeSum / Object.keys(timeArr).length, "s"));
+
+                // ==== Graphs ====
+
+                // ---- Speed Graph ----
+
+                let graphSpeedLabels = [];
+                let graphSpeedMax = [];
+                let graphSpeedAvg = [];
+                let graphDuration = [];
+                let graphDistance = [];
+
+                for (let i = 0; i < routesKeysOrdered.length; i++) {
+                    if (routes[routesKeysOrdered[i]].statusId < ROUTE_STATE_PARSING_DONE)
+                        continue;
+
+                    graphSpeedLabels.push(routes[routesKeysOrdered[i]].startDate);
+
+                    graphSpeedMax.push(formatSpeedNoUnit(routes[routesKeysOrdered[i]].maxSpeed, "mi/h"));
+                    graphSpeedAvg.push(formatSpeedNoUnit(routes[routesKeysOrdered[i]].avgSpeed, "mi/h"));
+
+                    graphDuration.push(formatTimeNoUnit(routes[routesKeysOrdered[i]].duration, "s"));
+
+                    graphDistance.push(formatDistanceNoUnit(routes[routesKeysOrdered[i]].totalDist, "mi"));
+
+                }
+
+                chrtGlobalSpeed.data.labels = graphSpeedLabels;
+                chrtGlobalSpeed.data.datasets[3].data = graphSpeedAvg;
+                chrtGlobalSpeed.data.datasets[0].data = graphSpeedMax;
+
+                chrtGlobalSpeed.data.datasets[1].data = graphDuration;
+                chrtGlobalSpeed.data.datasets[2].data = graphDistance;
+
+                chrtGlobalSpeed.update(doneRoutes == totRoutes ? 1000 : 0);
+            }
+
+            var imageWorkerStarted = false;
+
+            function testStartFindImageWorkers() {
+                if (imageWorkerStarted)
+                    return;
+
+                var doneRoutes = 0;
+                var totRoutes = routesKeys.length;
+
+                $.each(routes, function (index, value) {
+                    if (value.statusId >= ROUTE_STATE_PARSING_DONE)
+                        doneRoutes++;
+                });
+
+                if (doneRoutes == totRoutes) {
+                    imageWorkerStarted = true;
+                    routeIndex = routesKeys.length - 1;
+                    for (let i = 0; i < localStorage.getItem("workerNb") ; i++) {
+                        startRouteWorker(i, "FindMaxPicture");
+                    }
+
+                }
+            }
+
+            // ==== drive selection ====
+            var selectedDrive = -1;
+
+            $("#playerImg").on("error", function () {
+                $(this).attr("src", "/Assets/Custom/img/na.png");
+            });
+
+
+
+            $("#tblDrives tbody").on("click", "tr", function () {
+                $("#btnPause").click();
+
+                $("#tblDrives tbody tr").removeClass("table-danger");
+                $(this).addClass("table-danger");
+
+                selectedDrive = $(this).attr("routeId");
+
+                var route = routes[routesKeys[selectedDrive]];
+
+                $("#playerPos").data("ionRangeSlider").update({
+                    from: +moment(route.data[0].date).format("X"),
+
+                    min: +moment(route.data[0].date).format("X"),
+                    max: +moment(route.data[route.data.length - 1].date).format("X"),
+
+                    from_min: +moment(route.data[0].date).format("X"),
+                    from_max: +moment(route.data[route.statusId >= ROUTE_STATE_MAX_IMAGE_FOUND ? route.maxPicture : route.data.length - 1].date).format("X")
+                });
+
+                $("#gifPos").data("ionRangeSlider").update({
+                    from: +moment(route.data[0].date).format("X"),
+
+                    min: +moment(route.data[0].date).format("X"),
+                    max: +moment(route.data[route.data.length - 1].date).format("X")
+                });
+
+                let labelArr = [];
+                let speedArr = [];
+                let distanceArr = [];
+
+                for (let i = 0; i < route.data.length; i++) {
+                    labelArr.push(route.data[i].dateStr);
+
+                    speedArr.push(formatSpeedNoUnit(route.data[i].speed, "m/s"));
+                    distanceArr.push(formatDistanceNoUnit(route.data[i].dist, "mi"));
+                }
+
+                chrtDriveSpeed.data.labels = labelArr;
+                chrtDriveSpeed.data.datasets[0].data = speedArr;
+                chrtDriveSpeed.data.datasets[1].data = distanceArr;
+                chrtDriveSpeed.update();
+
+                $("#txtDriveInfoStartDate").text(route.startDate);
+                $("#txtDriveInfoEndDate").text(route.endDate);
+
+                $("#txtDriveInfoMinSpeed").text(formatSpeed(route.minSpeed, "m/s"));
+                $("#txtDriveInfoMaxSpeed").text(formatSpeed(route.maxSpeed, "m/s"));
+                $("#txtDriveInfoAvgSpeed").text(formatSpeed(route.avgSpeed, "m/s"));
+
+                $("#txtDriveInfoGPSPoint").text(route.data.length);
+            });
+
+            let posTimeout = null;
+            $("#playerPos").on("change", function () {
+                clearTimeout(posTimeout);
+
+                posTimeout = setTimeout(function () {
+                    updatePlayerPicture();
+                }, 100);
+            });
+
+            $("#btnPrevImg").click(function () {
+                $("#btnPause").click();
+                $("#playerPos").data("ionRangeSlider").update({ from: +$("#playerPos").val() - 1 });
+                updatePlayerPicture();
+            });
+
+            $("#btnNextImg").click(function () {
+                $("#btnPause").click();
+                $("#playerPos").data("ionRangeSlider").update({ from: +$("#playerPos").val() + 1 });
+                updatePlayerPicture();
+            });
+
+            $("#btnSpeedMinus").click(function () {
+                let idx = $('#inpSpeed [value="' + $("#inpSpeed").val() + '"]').index();
+
+                idx--;
+
+                if (idx < 0)
+                    idx = 0;
+
+                idx++;
+
+                $('#inpSpeed').val($('#inpSpeed :nth-child(' + idx + ')').attr("value"));
+            });
+
+            $("#btnSpeedPlus").click(function () {
+                let idx = $('#inpSpeed [value="' + $("#inpSpeed").val() + '"]').index();
+
+                idx++;
+
+                if (idx > $('#inpSpeed').children().length - 1)
+                    idx = $('#inpSpeed').children().length - 1;
+
+                idx++;
+
+                $('#inpSpeed').val($('#inpSpeed :nth-child(' + idx + ')').attr("value"));
+            });
+
+
+            let playTimeout = null;
+            let lastPlay = 0;
+
+            $("#btnPlay").click(function () {
+                $("#btnPlay").prop("hidden", true);
+                $("#btnPause").prop("hidden", false);
+
+                playStep();
+            });
+
+            function playStep() {
+                $("#playerPos").data("ionRangeSlider").update({ from: +$("#playerPos").val() + 1 });
+                if (lastPlay == $("#playerPos").val()) {
+                    $("#btnPause").click();
+                    return;
+                }
+
+
+                updatePlayerPicture();
+
+                lastPlay = +$("#playerPos").val();
+
+                let speed = 1000 / +$("#inpSpeed").val();
+
+                playTimeout = setTimeout(playStep, speed);
+            }
+
+            $("#btnPause").click(function () {
+                $("#btnPlay").prop("hidden", false);
+                $("#btnPause").prop("hidden", true);
+
+                clearTimeout(playTimeout);
+            });
+
+
+            let loaderTimeout = null;
+
+            function updatePlayerPicture() {
+                let key = moment($("#playerPos").val(), "X").format();
+
+                clearTimeout(loaderTimeout);
+
+                loaderTimeout = setTimeout(function () {
+                    $("#playerImgOverlay").show();
+                }, 100);
+
+
+
+                $("#playerImg").attr("src", routes[routesKeys[selectedDrive]].dataByDate[key].pictureURL);
+
+                for (let i = 1; i <= 3 + 2 * (+$("#inpSpeed").val()) ; i++) {
+                    let subKey = moment(+$("#playerPos").val() + i, "X").format();
+                    if (typeof routes[routesKeys[selectedDrive]].dataByDate[subKey] != "undefined") {
+                        let img = new Image();
+                        img.src = routes[routesKeys[selectedDrive]].dataByDate[subKey].pictureURL;
+
+                    }
+                }
+            }
+
+            $("#playerImg").on("load", function () {
+                clearTimeout(loaderTimeout);
+                $("#playerImgOverlay").hide();
+            });
+
+            // ==== Exports & miscs ====
+            $("#btnCommaTokenModal").click(function() {
+                $("#commaTokenModal").modal("show");
+            });
+
+            var clip = new Clipboard('#btnCopyLnkShare');
+
+            $("#btnShareLnk").click(function() {
+                $("#shareLnkModal").modal("show");
+
+                $("#inpLnkShare").val(window.location.href + "#ct=" + btoa(localStorage.getItem("COD.CommaToken")));
+            });
+
+            $("#btnDisconnect").click(function() {
+                localStorage.setItem("COD.CommaToken", "");
+                localStorage.setItem("COD.GoogleToken", "");
+
+                location.reload();
+            });
+
+        });
+
+
+    </script>
+</body>
+
+</html>
