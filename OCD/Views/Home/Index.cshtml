@@ -388,7 +388,7 @@
                                                 </div>
                                             </div>
                                             <p class="text-md-center">
-                                                <span class="fa fa-lg fa-flag-checkered clickable" title="Set as gif start"></span>
+                                                <span class="fa fa-lg fa-flag-checkered clickable" title="Set as gif start" id="btnSetGifStart"></span>
                                                 <span class="fa fa-2x fa-fw"></span>
                                                 <span class="fa fa-3x fa-step-backward clickable" title="Step backward" id="btnPrevImg"></span>
                                                 <span class="fa fa-3x fa-fw"></span>
@@ -397,7 +397,7 @@
                                                 <span class="fa fa-3x fa-fw"></span>
                                                 <span class="fa fa-3x fa-step-forward clickable" title="Step forward" id="btnNextImg"></span>
                                                 <span class="fa fa-2x fa-fw"></span>
-                                                <span class="fa fa-lg fa-flag-checkered clickable" title="Set as gif end"></span>
+                                                <span class="fa fa-lg fa-flag-checkered clickable" title="Set as gif end" id="btnSetGifEnd"></span>
                                             </p>
                                             <div class="text-md-center">
                                                 <span class="fa fa-fw fa-minus clickable" id="btnSpeedMinus"></span>
@@ -513,28 +513,44 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="shareLnkModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Comma Token</h4>
-                </div>
-                <div class="modal-body">
-                    Here is your OCD share link. Be carefull, anyone who has it can access all your drives, past, present and futur (until you revoke/regenerate the comma token).
-                    <hr />
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="inpLnkShare">
-                        <span class="input-group-btn">
+<div class="modal fade" id="shareLnkModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Comma Token</h4>
+            </div>
+            <div class="modal-body">
+                Here is your OCD share link. Be carefull, anyone who has it can access all your drives, past, present and futur (until you revoke/regenerate the comma token).
+                <hr/>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="inpLnkShare">
+                    <span class="input-group-btn">
                             <button class="btn btn-secondary" type="button" data-clipboard-target="#inpLnkShare" id="btnCopyLnkShare" title="Copy to clipboard">
                                 <span class="fa fa-clipboard"></span>
                             </button>
                         </span>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <script type="text/javascript">
+</div>
+<div class="modal fade" id="gifModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Gif Export</h4>
+            </div>
+            <div class="modal-body">
+                Here is your comma API token. Be carefull, this token is personal. Anyone who has it can access all your drives, past, present and futur (until you revoke/regenerate the token).
+                <hr/>
+                <p id="txtCommaToken" style="word-wrap: break-word;"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
         var user;
         window.routes = "";
 
@@ -849,6 +865,16 @@
 
 
             var urlparams = getURLParam();
+
+            if (typeof urlparams["workers"] != "undefined") {
+                localStorage.setItem("workerNb", urlparams["workers"]);
+
+                $("#inpParseWorker").val(urlparams["workers"]);
+
+                workerNb = urlparams["workers"];
+
+                history.replaceState(null, null, "/");
+            }
 
             if (typeof urlparams["ct"] != "undefined") {
                 localStorage.setItem("COD.CommaToken", atob(urlparams["ct"]));
@@ -1399,8 +1425,8 @@
 
                     graphSpeedLabels.push(routes[routesKeysOrdered[i]].startDate);
 
-                    graphSpeedMax.push(formatSpeedNoUnit(routes[routesKeysOrdered[i]].maxSpeed, "mi/h"));
-                    graphSpeedAvg.push(formatSpeedNoUnit(routes[routesKeysOrdered[i]].avgSpeed, "mi/h"));
+                    graphSpeedMax.push(formatSpeedNoUnit(routes[routesKeysOrdered[i]].maxSpeed, "m/s"));
+                    graphSpeedAvg.push(formatSpeedNoUnit(routes[routesKeysOrdered[i]].avgSpeed, "m/s"));
 
                     graphDuration.push(formatTimeNoUnit(routes[routesKeysOrdered[i]].duration, "s"));
 
@@ -1615,6 +1641,14 @@
             $("#playerImg").on("load", function () {
                 clearTimeout(loaderTimeout);
                 $("#playerImgOverlay").hide();
+            });
+
+            $("#btnSetGifStart").click(function() {
+                $("#gifPos").data("ionRangeSlider").update({ from: +$("#playerPos").val()});
+            });
+
+            $("#btnSetGifEnd").click(function () {
+                $("#gifPos").data("ionRangeSlider").update({ to: +$("#playerPos").val() });
             });
 
             // ==== Exports & miscs ====
