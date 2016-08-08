@@ -96,6 +96,8 @@
     <Content Include="Assets\Custom\img\empty.png" />
     <Content Include="Assets\Custom\img\na.png" />
     <Content Include="Assets\Custom\js\unitConverter.js" />
+    <Content Include="Assets\GifJs\js\gif.js" />
+    <Content Include="Assets\GifJs\js\gif.worker.js" />
     <Content Include="Assets\Ion.RangeSlider\css\ion.rangeSlider.css" />
     <Content Include="Assets\Ion.RangeSlider\css\ion.rangeSlider.skinFlat.css" />
     <Content Include="Assets\Ion.RangeSlider\css\ion.rangeSlider.skinHTML5.css" />

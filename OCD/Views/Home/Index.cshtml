@@ -388,7 +388,7 @@
                                                 </div>
                                             </div>
                                             <p class="text-md-center">
-                                                <span class="fa fa-lg fa-flag-checkered clickable" title="Set as gif start"></span>
+                                                <span class="fa fa-lg fa-flag-checkered clickable" title="Set as gif start" id="btnSetGifStart"></span>
                                                 <span class="fa fa-2x fa-fw"></span>
                                                 <span class="fa fa-3x fa-step-backward clickable" title="Step backward" id="btnPrevImg"></span>
                                                 <span class="fa fa-3x fa-fw"></span>
@@ -397,7 +397,7 @@
                                                 <span class="fa fa-3x fa-fw"></span>
                                                 <span class="fa fa-3x fa-step-forward clickable" title="Step forward" id="btnNextImg"></span>
                                                 <span class="fa fa-2x fa-fw"></span>
-                                                <span class="fa fa-lg fa-flag-checkered clickable" title="Set as gif end"></span>
+                                                <span class="fa fa-lg fa-flag-checkered clickable" title="Set as gif end" id="btnSetGifEnd"></span>
                                             </p>
                                             <div class="text-md-center">
                                                 <span class="fa fa-fw fa-minus clickable" id="btnSpeedMinus"></span>
@@ -483,67 +483,74 @@
     <!--/.Footer-->
 
 
-
-
-
-
-
-    <div class="row">
-        <div class="col-md-12">
-            <div class="modal fade" id="connectModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Welcome To OCD</h4>
-                        </div>
-                        <div class="modal-body">
-                            Please connect with the same google account as you connect on comma.
-                            <hr/>
-                            <div class="text-xs-center">
-                                <a class="btn btn-success" id="lnkGoogle">Connect</a>
-                            </div>
-                        </div>
-                    </div>
+    <div class="modal fade" id="connectModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Welcome To OCD</h4>
                 </div>
-            </div>
-            <div class="modal fade" id="commaTokenModal" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Comma Token</h4>
-                        </div>
-                        <div class="modal-body">
-                            Here is your comma API token. Be carefull, this token is personal. Anyone who has it can access all your drives, past, present and futur (until you revoke/regenerate the token).
-                            <hr/>
-                            <p id="txtCommaToken" style="word-wrap: break-word;"></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal fade" id="shareLnkModal" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Comma Token</h4>
-                        </div>
-                        <div class="modal-body">
-                            Here is your OCD share link. Be carefull, anyone who has it can access all your drives, past, present and futur (until you revoke/regenerate the comma token).
-                            <hr/>
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="inpLnkShare">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-secondary" type="button" data-clipboard-target="#inpLnkShare" id="btnCopyLnkShare" title="Copy to clipboard">
-                                        <span class="fa fa-clipboard"></span>
-                                    </button>
-                                </span>
-                            </div>
-                        </div>
+                <div class="modal-body">
+                    Please connect with the same google account as you connect on comma.
+                    <hr />
+                    <div class="text-xs-center">
+                        <a class="btn btn-success" id="lnkGoogle">Connect</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script type="text/javascript">
+    <div class="modal fade" id="commaTokenModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Comma Token</h4>
+                </div>
+                <div class="modal-body">
+                    Here is your comma API token. Be carefull, this token is personal. Anyone who has it can access all your drives, past, present and futur (until you revoke/regenerate the token).
+                    <hr />
+                    <p id="txtCommaToken" style="word-wrap: break-word;"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="modal fade" id="shareLnkModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Comma Token</h4>
+            </div>
+            <div class="modal-body">
+                Here is your OCD share link. Be carefull, anyone who has it can access all your drives, past, present and futur (until you revoke/regenerate the comma token).
+                <hr/>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="inpLnkShare">
+                    <span class="input-group-btn">
+                            <button class="btn btn-secondary" type="button" data-clipboard-target="#inpLnkShare" id="btnCopyLnkShare" title="Copy to clipboard">
+                                <span class="fa fa-clipboard"></span>
+                            </button>
+                        </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="gifModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Gif Export</h4>
+            </div>
+            <div class="modal-body">
+                Here is your comma API token. Be carefull, this token is personal. Anyone who has it can access all your drives, past, present and futur (until you revoke/regenerate the token).
+                <hr/>
+                <p id="txtCommaToken" style="word-wrap: break-word;"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
         var user;
         window.routes = "";
 
@@ -839,7 +846,7 @@
 
 
             // ==== worker nb input ====
-            var workerNb = 10;
+            var workerNb = 3;
 
             if (localStorage.getItem("workerNb") !== null) {
                 workerNb = localStorage.getItem("workerNb");
@@ -858,6 +865,16 @@
 
 
             var urlparams = getURLParam();
+
+            if (typeof urlparams["workers"] != "undefined") {
+                localStorage.setItem("workerNb", urlparams["workers"]);
+
+                $("#inpParseWorker").val(urlparams["workers"]);
+
+                workerNb = urlparams["workers"];
+
+                history.replaceState(null, null, "/");
+            }
 
             if (typeof urlparams["ct"] != "undefined") {
                 localStorage.setItem("COD.CommaToken", atob(urlparams["ct"]));
@@ -954,7 +971,7 @@
             function run() {
                 $("#txtCommaToken").text(localStorage.getItem("COD.CommaToken"));
 
-                    loadEndPointJSON("me/", function (data) {
+                loadEndPointJSON("me/", function (data) {
                     user = data;
 
                     $("#txtUserName").text(data.username);
@@ -1018,11 +1035,12 @@
                 $("#txtDriveLoadTot").text(totRoutes);
 
 
+
                 if ($("#tblDrives tbody").children().length == 0) {
                     for (let i = 0; i < routesKeysOrdered.length; i++) {
-                        let value = routes[routesKeysOrdered[i]];
+                        let route = routes[routesKeysOrdered[i]];
 
-                        $("#tblDrives tbody").append('<tr routeId="' + value.id + '">' +
+                        let tr = $('<tr routeId="' + route.id + '">' +
                                                         '<td></td>' +
                                                         '<td></td>' +
                                                         '<td></td>' +
@@ -1032,23 +1050,36 @@
                                                         '<td></td>' +
                                                         '<td></td>' +
                                                       "</tr>");
+
+                        route.table = {};
+                        route.table.tr = tr;
+                        route.table.id = tr.children(":nth-child(1)");
+                        route.table.date = tr.children(":nth-child(2)");
+                        route.table.dist = tr.children(":nth-child(3)");
+                        route.table.duration = tr.children(":nth-child(4)");
+                        route.table.maxSpeed = tr.children(":nth-child(5)");
+                        route.table.avgSpeed = tr.children(":nth-child(6)");
+                        route.table.minSpeed = tr.children(":nth-child(7)");
+                        route.table.status = tr.children(":nth-child(8)");
+
+                        $("#tblDrives tbody").append(tr);
                     }
                 }
 
                 for (let i = 0; i < routesKeysOrdered.length; i++) {
-                    let value = routes[routesKeysOrdered[i]];
+                    let route = routes[routesKeysOrdered[i]];
 
-                    $('#tblDrives tbody tr[routeId="' + value.id + '"]').toggleClass("text-muted", value.statusId < ROUTE_STATE_PARSING_DONE);
+                    route.table.tr.toggleClass("text-muted", route.statusId < ROUTE_STATE_PARSING_DONE);
 
 
-                    $('#tblDrives tbody tr[routeId="' + value.id + '"] td:nth-child(1)').text(value.id);
-                    $('#tblDrives tbody tr[routeId="' + value.id + '"] td:nth-child(2)').text(value.date.format("YYYY/MM/DD HH:mm:ss"));
-                    $('#tblDrives tbody tr[routeId="' + value.id + '"] td:nth-child(3)').text(value.statusId >= ROUTE_STATE_PARSING_DONE ? formatDistance(value.totalDist, "mi") : formatDistance(value.len, "m"));
-                    $('#tblDrives tbody tr[routeId="' + value.id + '"] td:nth-child(4)').text(value.statusId >= ROUTE_STATE_PARSING_DONE ? formatTime(value.duration, "s") : "-");
-                    $('#tblDrives tbody tr[routeId="' + value.id + '"] td:nth-child(5)').text(value.statusId >= ROUTE_STATE_PARSING_DONE ? formatSpeed(value.maxSpeed, "m/s") : "-");
-                    $('#tblDrives tbody tr[routeId="' + value.id + '"] td:nth-child(6)').text(value.statusId >= ROUTE_STATE_PARSING_DONE ? formatSpeed(value.avgSpeed, "m/s") : "-");
-                    $('#tblDrives tbody tr[routeId="' + value.id + '"] td:nth-child(7)').text(value.statusId >= ROUTE_STATE_PARSING_DONE ? formatSpeed(value.minSpeed, "m/s") : "-");
-                    $('#tblDrives tbody tr[routeId="' + value.id + '"] td:nth-child(8)').text(value.status);
+                    route.table.id.text(route.id);
+                    route.table.date.text(route.date.format("YYYY/MM/DD HH:mm:ss"));
+                    route.table.dist.text(route.statusId >= ROUTE_STATE_PARSING_DONE ? formatDistance(route.totalDist, "mi") : formatDistance(route.len, "m"));
+                    route.table.duration.text(route.statusId >= ROUTE_STATE_PARSING_DONE ? formatTime(route.duration, "s") : "-");
+                    route.table.maxSpeed.text(route.statusId >= ROUTE_STATE_PARSING_DONE ? formatSpeed(route.maxSpeed, "m/s") : "-");
+                    route.table.avgSpeed.text(route.statusId >= ROUTE_STATE_PARSING_DONE ? formatSpeed(route.avgSpeed, "m/s") : "-");
+                    route.table.minSpeed.text(route.statusId >= ROUTE_STATE_PARSING_DONE ? formatSpeed(route.minSpeed, "m/s") : "-");
+                    route.table.status.text(route.status);
                 };
             }
 
@@ -1326,18 +1357,18 @@
                     if (value.maxSpeed > maxSpeed)
                         maxSpeed = value.maxSpeed;
 
-                    let startDate = moment(value.startDate, "YYYY/MM/DD HH:mm:ss");
-                    let endDate = moment(value.endDate, "YYYY/MM/DD HH:mm:ss");
+                    let startDate = value.startDate.substr(0, 10);
+                    let endDate = value.endDate.substr(0, 10);
 
-                    if (startDate.date() == endDate.date()) {
-                        if (typeof timeArr[startDate.format("YYYY/MM/DD")] == "undefined")
-                            timeArr[startDate.format("YYYY/MM/DD")] = 0;
+                    if (startDate.substr(5, 2) == endDate.substr(5, 2)) {
+                        if (typeof timeArr[startDate] == "undefined")
+                            timeArr[startDate] = 0;
 
-                        if (typeof distanceArr[startDate.format("YYYY/MM/DD")] == "undefined")
-                            distanceArr[startDate.format("YYYY/MM/DD")] = 0;
+                        if (typeof distanceArr[startDate] == "undefined")
+                            distanceArr[startDate] = 0;
 
-                        timeArr[startDate.format("YYYY/MM/DD")] += value.duration;
-                        distanceArr[startDate.format("YYYY/MM/DD")] += value.totalDist;
+                        timeArr[startDate] += value.duration;
+                        distanceArr[startDate] += value.totalDist;
 
                     } else {
                         for (let i = 0; i < value.data.length; i++) {
@@ -1352,7 +1383,7 @@
                             timeArr[date] += 1;
 
                             if (typeof value.data[i - 1] != "undefined")
-                                distanceArr[startDate.format("YYYY/MM/DD")] += value.data[i].dist - value.data[i - 1].dist;
+                                distanceArr[startDate] += value.data[i].dist - value.data[i - 1].dist;
                         }
                     }
                 });
@@ -1394,8 +1425,8 @@
 
                     graphSpeedLabels.push(routes[routesKeysOrdered[i]].startDate);
 
-                    graphSpeedMax.push(formatSpeedNoUnit(routes[routesKeysOrdered[i]].maxSpeed, "mi/h"));
-                    graphSpeedAvg.push(formatSpeedNoUnit(routes[routesKeysOrdered[i]].avgSpeed, "mi/h"));
+                    graphSpeedMax.push(formatSpeedNoUnit(routes[routesKeysOrdered[i]].maxSpeed, "m/s"));
+                    graphSpeedAvg.push(formatSpeedNoUnit(routes[routesKeysOrdered[i]].avgSpeed, "m/s"));
 
                     graphDuration.push(formatTimeNoUnit(routes[routesKeysOrdered[i]].duration, "s"));
 
@@ -1612,20 +1643,28 @@
                 $("#playerImgOverlay").hide();
             });
 
+            $("#btnSetGifStart").click(function() {
+                $("#gifPos").data("ionRangeSlider").update({ from: +$("#playerPos").val()});
+            });
+
+            $("#btnSetGifEnd").click(function () {
+                $("#gifPos").data("ionRangeSlider").update({ to: +$("#playerPos").val() });
+            });
+
             // ==== Exports & miscs ====
-            $("#btnCommaTokenModal").click(function() {
+            $("#btnCommaTokenModal").click(function () {
                 $("#commaTokenModal").modal("show");
             });
 
             var clip = new Clipboard('#btnCopyLnkShare');
 
-            $("#btnShareLnk").click(function() {
+            $("#btnShareLnk").click(function () {
                 $("#shareLnkModal").modal("show");
 
                 $("#inpLnkShare").val(window.location.href + "#ct=" + btoa(localStorage.getItem("COD.CommaToken")));
             });
 
-            $("#btnDisconnect").click(function() {
+            $("#btnDisconnect").click(function () {
                 localStorage.setItem("COD.CommaToken", "");
                 localStorage.setItem("COD.GoogleToken", "");
 
