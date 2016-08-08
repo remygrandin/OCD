@@ -30,13 +30,8 @@ var ajax = function (url, data, callback, type, async) {
     };
     try {
         req.send(data_string);
-        //if (async !== true)
-            //callback(req.responseText, req.status);
-        //else
             return req;
     } catch (e) {
-        console.log("bip");
-        //callback(null, 0);
     }
     
 };
@@ -97,20 +92,23 @@ function processRoute(url) {
         retObj.dataByDate = {};
 
         for (let i = 0; i < retObj.data.length; i++) {
-            retObj.data[i].pictureURL = url + "/sec" + (i + 1) + ".jpg";
+            let point = retObj.data[i];
+            point.pictureURL = url + "/sec" + (i + 1) + ".jpg";
 
-            retObj.avgSpeed += retObj.data[i].speed;
+            retObj.avgSpeed += point.speed;
 
-            retObj.data[i].date = date.clone().add(i, "seconds").format();
+            let pointDate = date.clone().add(i, "seconds");
 
-            retObj.data[i].dateStr = date.clone().add(i, "seconds").format("YYYY/MM/DD HH:mm:ss");
+            point.date = pointDate.format();
 
-            retObj.dataByDate[retObj.data[i].date] = retObj.data[i];
+            point.dateStr = pointDate.format("YYYY/MM/DD HH:mm:ss");
 
-            if (retObj.data[i].speed > retObj.maxSpeed)
+            retObj.dataByDate[point.date] = point;
+
+            if (point.speed > retObj.maxSpeed)
                 retObj.maxSpeed = retObj.data[i].speed;
 
-            if (retObj.data[i].speed < retObj.minSpeed)
+            if (point.speed < retObj.minSpeed)
                 retObj.minSpeed = retObj.data[i].speed;
         }
 
