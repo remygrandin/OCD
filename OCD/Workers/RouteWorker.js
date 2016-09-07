@@ -93,13 +93,14 @@ function processRoute(url) {
 
         for (let i = 0; i < retObj.data.length; i++) {
             let point = retObj.data[i];
-            point.pictureURL = url + "/sec" + (i + 1) + ".jpg";
+            point.secPos = i;
+            point.pictureURL = url + "/sec" + (point.secPos + 1) + ".jpg";
 
             retObj.avgSpeed += point.speed;
 
             let pointDate = date.clone().add(i, "seconds");
 
-            point.date = pointDate.format();
+            point.date = pointDate.toISOString();
 
             point.dateStr = pointDate.format("YYYY/MM/DD HH:mm:ss");
 

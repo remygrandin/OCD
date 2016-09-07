@@ -40,6 +40,8 @@
 
     <script type="text/javascript" src="/Assets/ClipboardJs/js/clipboard.min.js"></script>
 
+    <script type="text/javascript" src="/Assets/GifJs/js/gif.js"></script>
+
     <style>
         main {
             padding-top: 3rem;
@@ -378,8 +380,8 @@
                                             Drive Player
                                         </div>
                                         <div class="card-block">
-                                            <div class="view hm-black-strong">
-                                                <img id="playerImg" class="z-depth-2 center-block figure-img img-thumbnail" src="/Assets/Custom/img/empty.png" alt="" />
+                                            <div class="view hm-black-strong text-md-center">
+                                                <img id="playerImg" class="z-depth-2 figure-img img-thumbnail" src="/Assets/Custom/img/empty.png" alt="" style="display: inline-block;"/>
                                                 <div class="mask flex-center" id="playerImgOverlay" style="display: none;">
                                                     <p class="white-text">Loading ...</p>
                                                 </div>
@@ -414,7 +416,7 @@
                                             <h5>Gif export (WIP - Not working currently):</h5>
                                             <input type="text" id="gifPos" />
                                             <br />
-                                            <button class="btn btn-success">Export</button>
+                                            <button class="btn btn-success" type="button" id="btnGifExportShow">Export</button>
                                         </div>
                                     </div>
 
@@ -428,17 +430,17 @@
                                                     <canvas id="chrtDriveSpeed" height="400" class="img-thumbnail"></canvas>
                                                 </div>
                                                 <div class="col-md-6">Started At :</div>
-                                                <div class="col-md-6"><span id="txtDriveInfoStartDate"></span></div>
+                                                <div class="col-md-6"><span id="txtDriveInfoStartDate">&nbsp;</span></div>
                                                 <div class="col-md-6">Ended At :</div>
-                                                <div class="col-md-6"><span id="txtDriveInfoEndDate"></span></div>
+                                                <div class="col-md-6"><span id="txtDriveInfoEndDate">&nbsp;</span></div>
                                                 <div class="col-md-6">Min Speed :</div>
-                                                <div class="col-md-6"><span id="txtDriveInfoMinSpeed"></span></div>
+                                                <div class="col-md-6"><span id="txtDriveInfoMinSpeed">&nbsp;</span></div>
                                                 <div class="col-md-6">Max Speed :</div>
-                                                <div class="col-md-6"><span id="txtDriveInfoMaxSpeed"></span></div>
+                                                <div class="col-md-6"><span id="txtDriveInfoMaxSpeed">&nbsp;</span></div>
                                                 <div class="col-md-6">Avg Speed :</div>
-                                                <div class="col-md-6"><span id="txtDriveInfoAvgSpeed"></span></div>
+                                                <div class="col-md-6"><span id="txtDriveInfoAvgSpeed">&nbsp;</span></div>
                                                 <div class="col-md-6">GPS Points :</div>
-                                                <div class="col-md-6"><span id="txtDriveInfoGPSPoint"></span></div>
+                                                <div class="col-md-6"><span id="txtDriveInfoGPSPoint">&nbsp;</span></div>
 
                                             </div>
                                         </div>
@@ -510,41 +512,67 @@
             </div>
         </div>
     </div>
-<div class="modal fade" id="shareLnkModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Comma Token</h4>
-            </div>
-            <div class="modal-body">
-                Here is your OCD share link. Be carefull, anyone who has it can access all your drives, past, present and futur (until you revoke/regenerate the comma token).
-                <hr/>
-                <div class="input-group">
-                    <input type="text" class="form-control" id="inpLnkShare">
-                    <span class="input-group-btn">
+    <div class="modal fade" id="shareLnkModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Share Link</h4>
+                </div>
+                <div class="modal-body">
+                    Here is your OCD share link. Be carefull, anyone who has it can access all your drives, past, present and futur (until you revoke/regenerate the comma token).
+                    <hr />
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="inpLnkShare">
+                        <span class="input-group-btn">
                             <button class="btn btn-secondary" type="button" data-clipboard-target="#inpLnkShare" id="btnCopyLnkShare" title="Copy to clipboard">
                                 <span class="fa fa-clipboard"></span>
                             </button>
                         </span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<div class="modal fade" id="gifModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Gif Export</h4>
-            </div>
-            <div class="modal-body">
-                Here is your comma API token. Be carefull, this token is personal. Anyone who has it can access all your drives, past, present and futur (until you revoke/regenerate the token).
-                <hr/>
-                <p id="txtCommaToken" style="word-wrap: break-word;"></p>
+    <div class="modal fade" id="gifModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Gif Export</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            Gif Parametters
+                        </div>
+                        <div class="col-md-6">
+
+                        </div>
+                        <div class="col-md-12 text-md-center">
+                            <button type="button" class="btn btn-info" id="btnGifStartExport">Start Export</button>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="text-md-center">
+                        Export Status :
+                    </div>
+                    <div class="text-md-center" id="txtGifStatus">
+
+                    </div>
+                    <progress class="progress progress-striped" value="0" max="100" id="prbGifExportStatus"></progress>
+                    <div class="text-md-center" id="txtGifExportStatus">
+                        Ready
+                    </div>
+                    <hr />
+                    <div class="text-md-center">
+                        Result :
+                    </div>
+                    <div class="text-md-center">
+                        <img id="imgGifExportResult" style="max-width: 100%" />
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
     <!-- MDB core JavaScript -->
     <script type="text/javascript" src="/Assets/MDB/js/mdb.js"></script>
@@ -1617,7 +1645,7 @@
             let loaderTimeout = null;
 
             function updatePlayerPicture() {
-                let key = moment($("#playerPos").val(), "X").format();
+                let key = moment($("#playerPos").val(), "X").toISOString();
 
                 clearTimeout(loaderTimeout);
 
@@ -1630,7 +1658,7 @@
                 $("#playerImg").attr("src", routes[routesKeys[selectedDrive]].dataByDate[key].pictureURL);
 
                 for (let i = 1; i <= 3 + 2 * (+$("#inpSpeed").val()) ; i++) {
-                    let subKey = moment(+$("#playerPos").val() + i, "X").format();
+                    let subKey = moment(+$("#playerPos").val() + i, "X").toISOString();
                     if (typeof routes[routesKeys[selectedDrive]].dataByDate[subKey] != "undefined") {
                         let img = new Image();
                         img.src = routes[routesKeys[selectedDrive]].dataByDate[subKey].pictureURL;
@@ -1644,13 +1672,91 @@
                 $("#playerImgOverlay").hide();
             });
 
-            $("#btnSetGifStart").click(function() {
-                $("#gifPos").data("ionRangeSlider").update({ from: +$("#playerPos").val()});
+
+            // ==== Gif ====
+
+            $("#btnSetGifStart").click(function () {
+                $("#gifPos").data("ionRangeSlider").update({ from: +$("#playerPos").val() });
             });
 
             $("#btnSetGifEnd").click(function () {
                 $("#gifPos").data("ionRangeSlider").update({ to: +$("#playerPos").val() });
             });
+
+            $("#btnGifExportShow").click(function () {
+                $("#gifModal").modal("show");
+            });
+
+            var gifExportData = {};
+
+            $("#btnGifStartExport").click(function () {
+                gifExportData.imagesForExport = [];
+                gifExportData.route = routes[routesKeys[selectedDrive]];
+                gifExportData.start = moment.unix($("#gifPos").val().split(";")[0]).toISOString();
+                gifExportData.end = moment.unix($("#gifPos").val().split(";")[1]).toISOString();
+
+                gifExportData.start = gifExportData.route.dataByDate[gifExportData.start].secPos;
+                gifExportData.end = gifExportData.route.dataByDate[gifExportData.end].secPos;
+
+                gifExportData.currentPos = gifExportData.start;
+
+                downloadGifImages();
+            });
+
+            function downloadGifImages() {
+                $("#prbGifExportStatus").attr("value", ((gifExportData.currentPos - gifExportData.start) * 100) / (gifExportData.end - gifExportData.start));
+                $("#txtGifExportStatus").text("Downloading picture " + (gifExportData.currentPos - gifExportData.start + 1) + "/" + (gifExportData.end - gifExportData.start + 1));
+
+                if (gifExportData.currentPos > gifExportData.end) {
+                    generateGif();
+                    return;
+                }
+
+                let image = new Image();
+                image.crossOrigin = "anonymous";
+                image.addEventListener("load", function () {
+
+                    gifExportData.imagesForExport.push(image);
+                    gifExportData.currentPos++;
+                    downloadGifImages();
+                }, false);
+
+                image.addEventListener("error", function () {
+                    gifExportData.currentPos++;
+                    downloadGifImages();
+                }, false);
+
+                image.src = gifExportData.route.data[gifExportData.currentPos].pictureURL;
+            }
+
+            function generateGif() {
+                $("#prbGifExportStatus").attr("value", 0);
+                $("#txtGifExportStatus").text("Starting Gif Generation");
+
+                gifExportData.gif = new GIF({
+                    workers: 2,
+                    quality: 10,
+                    workerScript: "/Assets/GifJs/js/gif.worker.js"
+                });
+
+                $.each(gifExportData.imagesForExport, function (index, value) {
+                    gifExportData.gif.addFrame(value, { delay: 1000 });
+                });
+
+
+                gifExportData.gif.on('finished', function (blob) {
+                    $("#txtGifExportStatus").text("Ready");
+                    $("#imgGifExportResult").attr("src", URL.createObjectURL(blob));
+                });
+
+                gifExportData.gif.on('progress', function(progress) {
+                    let val = Math.round(progress * 100);
+                    $("#prbGifExportStatus").attr("value", val);
+                    $("#txtGifExportStatus").text("Generating Gif (" + val + " %)");
+                });
+
+                gifExportData.gif.render();
+            }
 
             // ==== Exports & miscs ====
             $("#btnCommaTokenModal").click(function () {
