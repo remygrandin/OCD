@@ -328,6 +328,7 @@
                                     <label for="inpParseWorker"># of Parsing Workers</label>
                                 </div>
                                 <button class="btn btn-info" id="btnCommaTokenModal">Comma Token</button>
+                                <button class="btn btn-info" id="btnDeleteIDB">DeleteIDB</button>
                             </div>
                         </div>
                     </div>
@@ -335,9 +336,12 @@
                 <!--/.Sidebar-->
                 <!--Main column-->
                 <div class="col-md-9">
-
-                    <!--First row-->
                     <div class="row">
+                        <div class="col-md-12" style="display: none;" id="alrtNoIndexedDB">
+                            <div class="alert alert-warning" role="alert">
+                                Your browser don't support IndexedDB. No route data will be able to be cached.
+                            </div>
+                        </div>
                         <div class="col-md-12">
                             <div class="divider-new">
                                 <h2 class="h2-responsive">Welcome to the Open Comma Dashboard</h2>
@@ -353,16 +357,16 @@
                                     <div class="table-responsive">
                                         <table class="table table-sm table-striped table-hover table-fixedheader" id="tblDrives">
                                             <thead class="thead-default">
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Date</th>
-                                                    <th>Distance</th>
-                                                    <th>Time</th>
-                                                    <th>Max Speed</th>
-                                                    <th>Avg Speed</th>
-                                                    <th>Min Speed</th>
-                                                    <th>Status</th>
-                                                </tr>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Date</th>
+                                                <th>Distance</th>
+                                                <th>Time</th>
+                                                <th>Max Speed</th>
+                                                <th>Avg Speed</th>
+                                                <th>Min Speed</th>
+                                                <th>Status</th>
+                                            </tr>
                                             </thead>
                                             <tbody></tbody>
                                         </table>
@@ -389,7 +393,7 @@
                                         </div>
                                         <div class="card-block">
                                             <div class="view hm-black-strong text-md-center">
-                                                <img id="playerImg" class="z-depth-2 figure-img img-thumbnail" src="/Assets/Custom/img/empty.png" alt="" style="display: inline-block;" />
+                                                <img id="playerImg" class="z-depth-2 figure-img img-thumbnail" src="/Assets/Custom/img/empty.png" alt="" style="display: inline-block;"/>
                                                 <div class="mask flex-center" id="playerImgOverlay" style="display: none;">
                                                     <p class="white-text">Loading ...</p>
                                                 </div>
@@ -419,12 +423,12 @@
                                                 </select>
                                                 <span class="fa fa-fw fa-plus clickable" id="btnSpeedPlus"></span>
                                             </div>
-                                            <br />
-                                            <input type="text" id="playerPos" />
-                                            <hr />
+                                            <br/>
+                                            <input type="text" id="playerPos"/>
+                                            <hr/>
                                             <h5>Gif export :</h5>
-                                            <input type="text" id="gifPos" />
-                                            <br />
+                                            <input type="text" id="gifPos"/>
+                                            <br/>
                                             <button class="btn btn-success" type="button" id="btnGifExportShow">Export</button>
                                         </div>
                                     </div>
@@ -736,6 +740,10 @@
             return res;
         }
 
+        function getPictureUrl(route, dataPoint) {
+            return route.url + "/sec" + (dataPoint.secPos + 1) + ".jpg";
+        }
+
         // ==== Formating fct ====
 
         function formatDistance(value, sourceUnit) {
@@ -978,76 +986,117 @@
                                 if (!result) {
                                     showAuthModal();
                                 } else
-                                    run();
+                                    loadDB();
                             });
                         }
                     });
                 }
                 else
-                    run();
+                    loadDB();
             });
 
-            var routeIndex = 0;
             var routeWorkers = [];
-            var routesKeys;
-            var routesKeysOrdered;
+            var routesProcessQueue;
+            var routesOrdered;
 
             function startRouteWorker(id, startCmd) {
-                let rtIndex = routeIndex--;
-
-
-                if (typeof routesKeys[rtIndex] !== "undefined") {
+                let workerRoute = routesProcessQueue.shift();
+                
+                if (typeof workerRoute !== "undefined") {
                     var worker = new Worker('/Workers/RouteWorker.js');
 
                     routeWorkers[id] = worker;
 
-                    worker.postMessage({ cmd: "SetId", id: routes[routesKeys[rtIndex]].id });
+                    worker.postMessage({ cmd: "SetId", id: id });
 
-                    worker.onmessage = function (event) {
+                    worker.onmessage = function(event) {
                         switch (event.data.cmd) {
-                            case "setState":
-                                routes[routesKeys[rtIndex]].status = event.data.state;
-                                routes[routesKeys[rtIndex]].statusId = event.data.id;
-                                updateTable();
-                                break;
-                            case "setTime":
-                                routes[routesKeys[rtIndex]].execTime = event.data.time;
-                                break;
-                            case "parsingDone":
-                                $.extend(routes[routesKeys[rtIndex]], event.data.obj);
-                                updateGlobalData();
-                                break;
-                            case "maxPictureFound":
-                                routes[routesKeys[rtIndex]].maxPicture = event.data.obj;
-                                updateGlobalData();
-                                break;
-                            case "done":
-                                rtIndex = routeIndex--;
+                        case "setState":
+                            workerRoute.status = event.data.state;
+                            workerRoute.statusId = event.data.id;
+                            updateTable();
+                            break;
+                        case "setTime":
+                            workerRoute.execTime = event.data.time;
+                            break;
+                        case "parsingDone":
+                            $.extend(workerRoute, event.data.obj);
+                            updateGlobalData();
+                            break;
+                        case "maxPictureFound":
+                            workerRoute.maxPicture = event.data.obj;
+                            updateGlobalData();
+                            break;
+                        case "done":
+                            // Saving
+                            let objectStore = db.transaction(['Drives'], "readwrite").objectStore('Drives');
 
-                                if (typeof routesKeys[rtIndex] !== "undefined") {
-                                    worker.postMessage({
-                                        cmd: startCmd,
-                                        url: routes[routesKeys[rtIndex]].url,
-                                        key: routesKeys[rtIndex],
-                                        pointCount: routes[routesKeys[rtIndex]].duration
-                                    });
-                                } else {
-                                    routeWorkers[id].terminate();
-                                    testStartFindImageWorkers();
-                                }
-                                break;
+                            let clone = $.extend(true, {}, workerRoute);
+
+                            delete clone.table;
+                            delete clone.date;
+
+                            console.log("Starting Storing " + clone.id);
+
+                            objectStore.put(clone).onsuccess = function() {
+                                console.log("Finished Storing " + clone.id);
+                            };
+
+                            workerRoute = routesProcessQueue.shift();
+
+                            if (typeof workerRoute !== "undefined") {
+                                worker.postMessage({
+                                    cmd: startCmd,
+                                    url: workerRoute.url,
+                                    key: workerRoute.key,
+                                    pointCount: workerRoute.duration
+                                });
+                            } else {
+                                routeWorkers[id].terminate();
+                                testStartFindImageWorkers();
+                            }
+                            break;
                         }
                     };
 
                     worker.postMessage({
                         cmd: startCmd,
-                        url: routes[routesKeys[rtIndex]].url,
-                        key: routesKeys[rtIndex],
-                        pointCount: routes[routesKeys[rtIndex]].duration
+                        url: workerRoute.url,
+                        key: workerRoute.key,
+                        pointCount: workerRoute.duration
                     });
+
+                    return true;
+                } else {
+                    updateTable();
+                    testStartFindImageWorkers();
+                    return false;
                 }
             }
 
+            var db = null;
+
+            function loadDB() {
+                if (!window.indexedDB) {
+                    $("#alrtNoIndexedDB").show();
+                    run();
+                    return;
+                }
+
+                var request = window.indexedDB.open("OCD", 1);
+
+                request.onupgradeneeded = function(event) {
+                    db = event.target.result;
+
+                    var objectStore = db.createObjectStore("Drives", { keyPath: "key" });
+                };
+
+                request.onsuccess = function (event) {
+                    db = event.target.result;
+
+                    run();
+                }
+            }
 
             function run() {
                 $("#txtCommaToken").text(localStorage.getItem("COD.CommaToken"));
@@ -1062,45 +1111,66 @@
                 loadEndPointJSON("me/routes/", function (data) {
                     routes = data.routes;
 
-                    routesKeys = [];
-                    routesKeysOrdered = [];
-
-
-                    let id = 0;
-
+                    routesOrdered = [];
+                    routesProcessQueue = [];
+   
                     $.each(routes, function (index, value) {
-                        routesKeys.push(index);
-                        routesKeysOrdered.push(index);
                         value.status = "Queued";
                         value.statusId = -1;
-                        id++;
-
+                        value.key = index;
+                        
                         value.date = moment(index, "YYYY-MM-DD--HH-mm-ss");
                     });
 
-                    routesKeys = routesKeys.sort(function (a, b) { return (a.localeCompare(b)); });
+                    
 
-                    for (let i = 0; i < routesKeys.length; i++) {
-                        routes[routesKeys[i]].id = i;
-                    }
+                    var transaction = db.transaction('Drives', "readonly");
+                    var objectStore = transaction.objectStore('Drives');
 
-                    routeIndex = routesKeys.length - 1;
+                    objectStore.openCursor().onsuccess = function(event) {
+                        var cursor = event.target.result;
+                        if (cursor) {
+                            let data = cursor.value;
 
-                    routesKeysOrdered = routesKeys.slice().sort(function (a, b) { return (a.localeCompare(b)) * -1; });
+                            data.date = moment(data.key, "YYYY-MM-DD--HH-mm-ss");
 
-                    updateTable();
+                            routes[data.key] = $.extend({}, data, routes[data.key]);
 
+                            routes[data.key].statusId = data.statusId;
+                            routes[data.key].status = data.status;
+                            
+                            cursor.continue();
+                        } else { // if no cursor => cursor ended
+                            updateTable();
 
-                    for (let i = 0; i < localStorage.getItem("workerNb") ; i++) {
-                        startRouteWorker(i, "ParseRoute");
-                    }
+                            $.each(routes, function (index, value) {
+                                routesOrdered.push(value);
+                                if (value.statusId == -1)
+                                    routesProcessQueue.push(value);
+                            });
+
+                            routesOrdered = routesOrdered.sort(function (a, b) { return (a.key.localeCompare(b.key)); });
+
+                            for (let i = 0; i < routesOrdered.length; i++) {
+                                routesOrdered[i].id = i;
+                            }
+
+                            for (let i = 0; i < localStorage.getItem("workerNb") ; i++) {
+                                let startResult = startRouteWorker(i, "ParseRoute");
+
+                                if (!startResult)
+                                    break;
+                            }
+                        }
+                    };
+                    
                 });
             }
 
             function updateTable() {
 
                 var doneRoutes = 0;
-                var totRoutes = routesKeys.length;
+                var totRoutes = routesOrdered.length;
 
                 $.each(routes, function (index, value) {
                     if (value.statusId >= ROUTE_STATE_PARSING_DONE)
@@ -1118,10 +1188,10 @@
 
 
                 if ($("#tblDrives tbody").children().length == 0) {
-                    for (let i = 0; i < routesKeysOrdered.length; i++) {
-                        let route = routes[routesKeysOrdered[i]];
+                    for (let i = 0; i < routesOrdered.length; i++) {
+                        let route = routesOrdered[i];
 
-                        let tr = $('<tr routeId="' + route.id + '">' +
+                        let tr = $('<tr routeKey="' + route.key + '">' +
                                                         '<td></td>' +
                                                         '<td></td>' +
                                                         '<td></td>' +
@@ -1147,8 +1217,8 @@
                     }
                 }
 
-                for (let i = 0; i < routesKeysOrdered.length; i++) {
-                    let route = routes[routesKeysOrdered[i]];
+                for (let i = 0; i < routesOrdered.length; i++) {
+                    let route = routesOrdered[i];
 
                     route.table.tr.toggleClass("text-muted", route.statusId < ROUTE_STATE_PARSING_DONE);
 
@@ -1163,6 +1233,54 @@
                     route.table.status.text(route.status);
                 };
             }
+
+            var imageWorkerStarted = false;
+
+            function testStartFindImageWorkers() {
+                if (imageWorkerStarted)
+                    return;
+
+                var doneRoutes = 0;
+                var totRoutes = routesOrdered.length;
+
+                $.each(routes, function (index, value) {
+                    if (value.statusId >= ROUTE_STATE_PARSING_DONE)
+                        doneRoutes++;
+                });
+
+                if (doneRoutes == totRoutes) {
+                    imageWorkerStarted = true;
+
+                    $.each(routes, function (index, value) {
+                        if (value.statusId != 7)
+                            routesProcessQueue.push(value);
+                    });
+
+                    for (let i = 0; i < localStorage.getItem("workerNb") ; i++) {
+                        let startResult = startRouteWorker(i, "FindMaxPicture");
+
+                        if (!startResult)
+                            break;
+                    }
+
+                }
+            }
+
+            $(window).on("beforeunload", function() {
+                db.close();
+            });
+
+            $("#btnDeleteIDB").click(function() {
+                var DBDeleteRequest = window.indexedDB.deleteDatabase("OCD");
+
+                DBDeleteRequest.onerror = function (event) {
+                    console.log("Error deleting database.");
+                };
+
+                DBDeleteRequest.onsuccess = function (event) {
+                    console.log("Database deleted successfully");
+                };
+            })
 
             // ==== Graphs ====
 
@@ -1409,7 +1527,7 @@
 
             function updateGlobalData() {
                 var doneRoutes = 0;
-                var totRoutes = routesKeys.length;
+                var totRoutes = routesOrdered.length;
 
 
                 var totalDist = 0;
@@ -1500,18 +1618,18 @@
                 let graphDuration = [];
                 let graphDistance = [];
 
-                for (let i = 0; i < routesKeysOrdered.length; i++) {
-                    if (routes[routesKeysOrdered[i]].statusId < ROUTE_STATE_PARSING_DONE)
+                for (let i = 0; i < routesOrdered.length; i++) {
+                    if (routesOrdered[i].statusId < ROUTE_STATE_PARSING_DONE)
                         continue;
 
-                    graphSpeedLabels.push(routes[routesKeysOrdered[i]].startDate);
+                    graphSpeedLabels.push(routesOrdered[i].startDate);
 
-                    graphSpeedMax.push(formatSpeedNoUnit(routes[routesKeysOrdered[i]].maxSpeed, "m/s"));
-                    graphSpeedAvg.push(formatSpeedNoUnit(routes[routesKeysOrdered[i]].avgSpeed, "m/s"));
+                    graphSpeedMax.push(formatSpeedNoUnit(routesOrdered[i].maxSpeed, "m/s"));
+                    graphSpeedAvg.push(formatSpeedNoUnit(routesOrdered[i].avgSpeed, "m/s"));
 
-                    graphDuration.push(formatTimeNoUnit(routes[routesKeysOrdered[i]].duration, "s"));
+                    graphDuration.push(formatTimeNoUnit(routesOrdered[i].duration, "s"));
 
-                    graphDistance.push(formatDistanceNoUnit(routes[routesKeysOrdered[i]].totalDist, "mi"));
+                    graphDistance.push(formatDistanceNoUnit(routesOrdered[i].totalDist, "mi"));
 
                 }
 
@@ -1525,32 +1643,8 @@
                 chrtGlobalSpeed.update(doneRoutes == totRoutes ? 1000 : 0);
             }
 
-            var imageWorkerStarted = false;
-
-            function testStartFindImageWorkers() {
-                if (imageWorkerStarted)
-                    return;
-
-                var doneRoutes = 0;
-                var totRoutes = routesKeys.length;
-
-                $.each(routes, function (index, value) {
-                    if (value.statusId >= ROUTE_STATE_PARSING_DONE)
-                        doneRoutes++;
-                });
-
-                if (doneRoutes == totRoutes) {
-                    imageWorkerStarted = true;
-                    routeIndex = routesKeys.length - 1;
-                    for (let i = 0; i < localStorage.getItem("workerNb") ; i++) {
-                        startRouteWorker(i, "FindMaxPicture");
-                    }
-
-                }
-            }
-
             // ==== drive selection ====
-            var selectedDrive = -1;
+            var selectedDrive = "";
 
             $("#playerImg").on("error", function () {
                 $(this).attr("src", "/Assets/Custom/img/na.png");
@@ -1564,9 +1658,9 @@
                 $("#tblDrives tbody tr").removeClass("table-danger");
                 $(this).addClass("table-danger");
 
-                selectedDrive = $(this).attr("routeId");
+                selectedDrive = $(this).attr("routeKey");
 
-                var route = routes[routesKeys[selectedDrive]];
+                var route = routes[selectedDrive];
 
                 $("#playerPos").data("ionRangeSlider").update({
                     from: +moment(route.data[0].date).format("X"),
@@ -1707,13 +1801,13 @@
 
 
 
-                $("#playerImg").attr("src", routes[routesKeys[selectedDrive]].dataByDate[key].pictureURL);
+                $("#playerImg").attr("src", getPictureUrl(routes[selectedDrive], routes[selectedDrive].dataByDate[key]));
 
                 for (let i = 1; i <= 3 + 2 * (+$("#inpSpeed").val()) ; i++) {
                     let subKey = moment(+$("#playerPos").val() + i, "X").toISOString();
-                    if (typeof routes[routesKeys[selectedDrive]].dataByDate[subKey] != "undefined") {
+                    if (typeof routes[selectedDrive].dataByDate[subKey] != "undefined") {
                         let img = new Image();
-                        img.src = routes[routesKeys[selectedDrive]].dataByDate[subKey].pictureURL;
+                        img.src = getPictureUrl(routes[selectedDrive], routes[selectedDrive].dataByDate[subKey]);
 
                     }
                 }
@@ -1760,7 +1854,7 @@
             $("#btnGifStartExport").click(function () {
                 $("#gifResultZone").hide();
                 gifExportData.imagesForExport = [];
-                gifExportData.route = routes[routesKeys[selectedDrive]];
+                gifExportData.route = routes[selectedDrive];
 
                 gifExportData.width = $("#inpGifWidth").val();
                 gifExportData.height = $("#inpGifHeight").val();
@@ -1803,7 +1897,7 @@
                     downloadGifImages();
                 }, false);
 
-                image.src = gifExportData.route.data[gifExportData.currentPos].pictureURL;
+                image.src = getPictureUrl(gifExportData.route, gifExportData.route.data[gifExportData.currentPos]);
             }
 
             function generateGif() {

@@ -94,7 +94,6 @@ function processRoute(url) {
         for (let i = 0; i < retObj.data.length; i++) {
             let point = retObj.data[i];
             point.secPos = i;
-            point.pictureURL = url + "/sec" + (point.secPos + 1) + ".jpg";
 
             retObj.avgSpeed += point.speed;
 
