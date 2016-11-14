@@ -414,7 +414,7 @@
                                                     <th>#</th>
                                                     <th>Date</th>
                                                     <th>Distance</th>
-                                                    <th>Duration</th>
+                                                    <th>Time</th>
                                                     <th>Max Speed</th>
                                                     <th>Avg Speed</th>
                                                     <th>Min Speed</th>
@@ -477,10 +477,10 @@
                                                 <span class="fa fa-fw fa-plus clickable" id="btnSpeedPlus"></span>
                                             </div>
                                             <br />
-                                            <input type="text" id="posPlayer" />
+                                            <input type="text" id="playerPos" />
                                             <hr />
                                             <h5>Gif export :</h5>
-                                            <input type="text" id="posGif" />
+                                            <input type="text" id="gifPos" />
                                             <br />
                                             <button class="btn btn-success" type="button" id="btnGifExportShow">Export</button>
                                         </div>
@@ -1092,6 +1092,9 @@
 
                     worker.onmessage = function (event) {
                         switch (event.data.cmd) {
+                            case "echo":
+                                console.log(event.data.echo);
+                                break;
                             case "setState":
                                 workerRoute.status = event.data.state;
                                 workerRoute.statusId = event.data.id;
@@ -1118,10 +1121,8 @@
                                 delete clone.table;
                                 delete clone.date;
 
-                                console.log("Starting Storing " + clone.id);
-
                                 objectStore.put(clone).onsuccess = function () {
-                                    console.log("Finished Storing " + clone.id);
+
                                 };
 
                                 workerRoute = routesProcessQueue.shift();
@@ -1226,7 +1227,6 @@
 
                             cursor.continue();
                         } else { // if no cursor => cursor ended
-                            updateTable();
 
                             $.each(routes, function (index, value) {
                                 routesOrdered.push(value);
@@ -1234,13 +1234,16 @@
                                     routesProcessQueue.push(value);
                             });
 
+                            routesOrdered = routesOrdered.sort(function (a, b) { return a.key.localeCompare(b.key); });
                             for (let i = 0; i < routesOrdered.length; i++) {
                                 routesOrdered[i].id = i;
                             }
 
-                            routesOrdered = routesOrdered.sort(function (a, b) { return (a.key.localeCompare(b.key)) * -1; });
+                            routesOrdered = routesOrdered.sort(function (a, b) { return a.key.localeCompare(b.key) * -1; });
 
-                            
+                            routesProcessQueue = routesProcessQueue.sort(function (a, b) { return a.key.localeCompare(b.key) * -1; });
+
+                            updateTable();
 
                             for (let i = 0; i < localStorage.getItem("workerNb") ; i++) {
                                 let startResult = startRouteWorker(i, "ParseRoute");
@@ -1448,6 +1451,8 @@
                         if (value.statusId != 7)
                             routesProcessQueue.push(value);
                     });
+
+                    routesProcessQueue = routesProcessQueue.sort(function (a, b) { return a.key.localeCompare(b.key) * -1; });
 
                     for (let i = 0; i < localStorage.getItem("workerNb") ; i++) {
                         let startResult = startRouteWorker(i, "FindMaxPicture");
