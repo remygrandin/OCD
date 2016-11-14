@@ -96,11 +96,11 @@
                 table.table-fixedheader > thead {
                     overflow-y: scroll;
                 }
-
+                
                     table.table-fixedheader > thead::-webkit-scrollbar {
                         background-color: inherit;
                     }
-
+                    
 
                     table.table-fixedheader > thead > tr > th:after, table.table-fixedheader > tbody > tr > td:after {
                         content: ' ';
@@ -124,22 +124,22 @@
 
         /* Col : # */
         #tblDrives th:nth-child(1), #tblDrives td:nth-child(1) {
-            width: 3%;
+            width: 5%;
         }
 
         /* Col : Date */
         #tblDrives th:nth-child(2), #tblDrives td:nth-child(2) {
-            width: 21%;
+            width: 20%;
         }
 
         /* Col : Distance */
         #tblDrives th:nth-child(3), #tblDrives td:nth-child(3) {
-            width: 12%;
+            width: 11%;
         }
 
         /* Col : Time */
         #tblDrives th:nth-child(4), #tblDrives td:nth-child(4) {
-            width: 8%;
+            width: 10%;
         }
 
         /* Col : Max Speed */
@@ -159,7 +159,7 @@
 
         /* Col : Status */
         #tblDrives th:nth-child(8), #tblDrives td:nth-child(8) {
-            width: 14%;
+            width: 12%;
         }
 
 
@@ -188,6 +188,18 @@
 
         .clickable {
             cursor: pointer;
+        }
+
+        .sort-btn {
+            margin-top: 5px;
+        }
+
+        #tblDrives thead th {
+            cursor: pointer;
+        }
+
+        .selected-sort {
+            color: rgb(110, 201, 230)
         }
     </style>
 </head>
@@ -349,6 +361,47 @@
                         </div>
                         <div class="col-md-12">
                             <div class="card z-depth-2">
+                                <div class="card-header success-color white-text">
+                                    Filters
+                                </div>
+                                <div class="card-block">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <strong>Distance</strong>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <input type="text" id="posFilterDistance" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <strong>Duration</strong>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <input type="text" id="posFilterDuration" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-1">
+                                                    <strong>Date</strong>
+                                                </div>
+                                                <div class="col-md-11">
+                                                    <input type="text" id="posFilterDate" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="card z-depth-2">
                                 <div class="card-header info-color-dark white-text">
                                     Drives
                                     <span class="pull-right"><span id="txtDriveLoadStatus">Initializing</span> - <span id="txtDriveLoadCurrent">-</span>/<span id="txtDriveLoadTot">-</span></span>
@@ -357,16 +410,16 @@
                                     <div class="table-responsive">
                                         <table class="table table-sm table-striped table-hover table-fixedheader" id="tblDrives">
                                             <thead class="thead-default">
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Date</th>
-                                                <th>Distance</th>
-                                                <th>Time</th>
-                                                <th>Max Speed</th>
-                                                <th>Avg Speed</th>
-                                                <th>Min Speed</th>
-                                                <th>Status</th>
-                                            </tr>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Date</th>
+                                                    <th>Distance</th>
+                                                    <th>Duration</th>
+                                                    <th>Max Speed</th>
+                                                    <th>Avg Speed</th>
+                                                    <th>Min Speed</th>
+                                                    <th>Status</th>
+                                                </tr>
                                             </thead>
                                             <tbody></tbody>
                                         </table>
@@ -393,7 +446,7 @@
                                         </div>
                                         <div class="card-block">
                                             <div class="view hm-black-strong text-md-center">
-                                                <img id="playerImg" class="z-depth-2 figure-img img-thumbnail" src="/Assets/Custom/img/empty.png" alt="" style="display: inline-block;"/>
+                                                <img id="playerImg" class="z-depth-2 figure-img img-thumbnail" src="/Assets/Custom/img/empty.png" alt="" style="display: inline-block;" />
                                                 <div class="mask flex-center" id="playerImgOverlay" style="display: none;">
                                                     <p class="white-text">Loading ...</p>
                                                 </div>
@@ -423,12 +476,12 @@
                                                 </select>
                                                 <span class="fa fa-fw fa-plus clickable" id="btnSpeedPlus"></span>
                                             </div>
-                                            <br/>
-                                            <input type="text" id="playerPos"/>
-                                            <hr/>
+                                            <br />
+                                            <input type="text" id="posPlayer" />
+                                            <hr />
                                             <h5>Gif export :</h5>
-                                            <input type="text" id="gifPos"/>
-                                            <br/>
+                                            <input type="text" id="posGif" />
+                                            <br />
                                             <button class="btn btn-success" type="button" id="btnGifExportShow">Export</button>
                                         </div>
                                     </div>
@@ -619,7 +672,7 @@
                             Result :
                         </div>
                         <div class="text-md-center">
-                            <img id="imgGifExportResult" style="max-width: 100%"/>
+                            <img id="imgGifExportResult" style="max-width: 100%" />
                         </div>
                         <div class="text-md-center">
                             <button type="button" class="btn btn-success" id="btnGifDownload">Download Gif (<span id="txtGifExportSize"></span> KiB)</button>
@@ -818,7 +871,9 @@
         $(function () {
             // Init
 
-            $("#playerPos").ionRangeSlider({
+            // Player
+
+            $("#posPlayer").ionRangeSlider({
                 grid: true,
                 prettify: function (num) {
                     return moment(num, "X").format("HH:mm:ss");
@@ -826,13 +881,38 @@
                 from_shadow: true
             });
 
-            $("#gifPos").ionRangeSlider({
+            $("#posGif").ionRangeSlider({
                 type: "double",
                 grid: true,
                 prettify: function (num) {
                     return moment(num, "X").format("HH:mm:ss");
                 },
                 from_shadow: true
+            });
+
+            // Filters
+            $("#posFilterDate").ionRangeSlider({
+                grid: true,
+                type: "double",
+                prettify: function (num) {
+                    return moment(num, "X").format("yyyy/MM/dd");
+                }
+            });
+
+            $("#posFilterDistance").ionRangeSlider({
+                grid: true,
+                type: "double",
+                prettify: function (num) {
+                    return formatDistance(num, "m");
+                }
+            });
+
+            $("#posFilterDuration").ionRangeSlider({
+                grid: true,
+                type: "double",
+                prettify: function (num) {
+                    return formatTime(num, "s");
+                }
             });
 
             // unit
@@ -976,6 +1056,7 @@
 
                 history.replaceState(null, null, "/");
             }
+
             testCommaToken(function (result) {
                 if (!result) {
                     commaAuth(function (result) {
@@ -1001,7 +1082,7 @@
 
             function startRouteWorker(id, startCmd) {
                 let workerRoute = routesProcessQueue.shift();
-                
+
                 if (typeof workerRoute !== "undefined") {
                     var worker = new Worker('/Workers/RouteWorker.js');
 
@@ -1009,53 +1090,55 @@
 
                     worker.postMessage({ cmd: "SetId", id: id });
 
-                    worker.onmessage = function(event) {
+                    worker.onmessage = function (event) {
                         switch (event.data.cmd) {
-                        case "setState":
-                            workerRoute.status = event.data.state;
-                            workerRoute.statusId = event.data.id;
-                            updateTable();
-                            break;
-                        case "setTime":
-                            workerRoute.execTime = event.data.time;
-                            break;
-                        case "parsingDone":
-                            $.extend(workerRoute, event.data.obj);
-                            updateGlobalData();
-                            break;
-                        case "maxPictureFound":
-                            workerRoute.maxPicture = event.data.obj;
-                            updateGlobalData();
-                            break;
-                        case "done":
-                            // Saving
-                            let objectStore = db.transaction(['Drives'], "readwrite").objectStore('Drives');
+                            case "setState":
+                                workerRoute.status = event.data.state;
+                                workerRoute.statusId = event.data.id;
+                                updateTable();
+                                break;
+                            case "setTime":
+                                workerRoute.execTime = event.data.time;
+                                break;
+                            case "parsingDone":
+                                $.extend(workerRoute, event.data.obj);
+                                updateGlobalData();
+                                updateFilter();
+                                break;
+                            case "maxPictureFound":
+                                workerRoute.maxPicture = event.data.obj;
+                                updateGlobalData();
+                                break;
+                            case "done": {
+                                // Saving
+                                let objectStore = db.transaction(['Drives'], "readwrite").objectStore('Drives');
 
-                            let clone = $.extend(true, {}, workerRoute);
+                                let clone = $.extend(true, {}, workerRoute);
 
-                            delete clone.table;
-                            delete clone.date;
+                                delete clone.table;
+                                delete clone.date;
 
-                            console.log("Starting Storing " + clone.id);
+                                console.log("Starting Storing " + clone.id);
 
-                            objectStore.put(clone).onsuccess = function() {
-                                console.log("Finished Storing " + clone.id);
-                            };
+                                objectStore.put(clone).onsuccess = function () {
+                                    console.log("Finished Storing " + clone.id);
+                                };
 
-                            workerRoute = routesProcessQueue.shift();
+                                workerRoute = routesProcessQueue.shift();
 
-                            if (typeof workerRoute !== "undefined") {
-                                worker.postMessage({
-                                    cmd: startCmd,
-                                    url: workerRoute.url,
-                                    key: workerRoute.key,
-                                    pointCount: workerRoute.duration
-                                });
-                            } else {
-                                routeWorkers[id].terminate();
-                                testStartFindImageWorkers();
+                                if (typeof workerRoute !== "undefined") {
+                                    worker.postMessage({
+                                        cmd: startCmd,
+                                        url: workerRoute.url,
+                                        key: workerRoute.key,
+                                        pointCount: workerRoute.duration
+                                    });
+                                } else {
+                                    routeWorkers[id].terminate();
+                                    testStartFindImageWorkers();
+                                }
+                                break;
                             }
-                            break;
                         }
                     };
 
@@ -1069,6 +1152,8 @@
                     return true;
                 } else {
                     updateTable();
+                    updateFilter();
+                    updateGlobalData();
                     testStartFindImageWorkers();
                     return false;
                 }
@@ -1085,7 +1170,7 @@
 
                 var request = window.indexedDB.open("OCD", 1);
 
-                request.onupgradeneeded = function(event) {
+                request.onupgradeneeded = function (event) {
                     db = event.target.result;
 
                     var objectStore = db.createObjectStore("Drives", { keyPath: "key" });
@@ -1113,21 +1198,21 @@
 
                     routesOrdered = [];
                     routesProcessQueue = [];
-   
+
                     $.each(routes, function (index, value) {
                         value.status = "Queued";
                         value.statusId = -1;
                         value.key = index;
-                        
+
                         value.date = moment(index, "YYYY-MM-DD--HH-mm-ss");
                     });
 
-                    
+
 
                     var transaction = db.transaction('Drives', "readonly");
                     var objectStore = transaction.objectStore('Drives');
 
-                    objectStore.openCursor().onsuccess = function(event) {
+                    objectStore.openCursor().onsuccess = function (event) {
                         var cursor = event.target.result;
                         if (cursor) {
                             let data = cursor.value;
@@ -1138,7 +1223,7 @@
 
                             routes[data.key].statusId = data.statusId;
                             routes[data.key].status = data.status;
-                            
+
                             cursor.continue();
                         } else { // if no cursor => cursor ended
                             updateTable();
@@ -1149,11 +1234,13 @@
                                     routesProcessQueue.push(value);
                             });
 
-                            routesOrdered = routesOrdered.sort(function (a, b) { return (a.key.localeCompare(b.key)); });
-
                             for (let i = 0; i < routesOrdered.length; i++) {
                                 routesOrdered[i].id = i;
                             }
+
+                            routesOrdered = routesOrdered.sort(function (a, b) { return (a.key.localeCompare(b.key)) * -1; });
+
+                            
 
                             for (let i = 0; i < localStorage.getItem("workerNb") ; i++) {
                                 let startResult = startRouteWorker(i, "ParseRoute");
@@ -1163,9 +1250,12 @@
                             }
                         }
                     };
-                    
+
                 });
             }
+
+            var sortCol = -1;
+            var sortOrd = 1;
 
             function updateTable() {
 
@@ -1232,6 +1322,109 @@
                     route.table.minSpeed.text(route.statusId >= ROUTE_STATE_PARSING_DONE ? formatSpeed(route.minSpeed, "m/s") : "-");
                     route.table.status.text(route.status);
                 };
+
+            }
+
+            // Table Filter
+            function updateFilter() {
+
+                let distanceMin = Number.MAX_VALUE;
+                let distanceMax = 0;
+
+
+
+                $.each(routes, function(index, value) {
+                    if (value.len < distanceMin)
+                        distanceMin = value.len;
+
+                    if (value.len > distanceMax)
+                        distanceMax = value.len;
+
+
+                });
+
+                $("#posFilterDistance").data("ionRangeSlider").update({
+
+                    min: distanceMin,
+                    max: distanceMax
+
+                });
+            }
+
+            // Table Sort
+            $("#tblDrives thead th").each(function() {
+                $(this).append('<span class="fa fa-fw fa-sort pull-right sort-btn"></span>');
+            });
+
+            $("#tblDrives thead th").on("click", function() {
+                let item = $(this).find(".sort-btn");
+                let idx = item.parents("th").first().index();
+                if (item.hasClass("fa-sort")) {
+                    $(".selected-sort").removeClass("fa-sort-asc fa-sort-desc selected-sort").addClass("fa-sort");
+
+                    item.removeClass("fa-sort").addClass("fa-sort-asc selected-sort");
+
+                    sortCol = idx;
+                    sortOrd = 1;
+                } else if (item.hasClass("fa-sort-asc")) {
+                    item.removeClass("fa-sort-asc").addClass("fa-sort-desc selected-sort");
+
+                    sortCol = idx;
+                    sortOrd = -1;
+                } else if (item.hasClass("fa-sort-desc")) {
+                    item.removeClass("fa-sort-desc  selected-sort").addClass("fa-sort");
+
+                    sortCol = -1;
+                    sortOrd = 1;
+                }
+
+                filterAndOrderTable();
+            });
+
+            function filterAndOrderTable() {
+                $("#tblDrives tbody").empty();
+
+                routesOrdered = [];
+
+                // Filter
+
+                $.each(routes, function(index, value) {
+                    routesOrdered.push(value);
+                });
+
+                // Order
+
+                if (sortCol !== -1) {
+                    switch(sortCol) {
+                        case 0:
+                            routesOrdered = routesOrdered.sort(function (a, b) { return (a.id - b.id) * sortOrd; });
+                            break;
+                        case 1:
+                            routesOrdered = routesOrdered.sort(function (a, b) { return (a.key.localeCompare(b.key)) * sortOrd; });
+                            break;
+                        case 2:
+                            routesOrdered = routesOrdered.sort(function (a, b) { return (a.totalDist - b.totalDist) * sortOrd; });
+                            break;
+                        case 3:
+                            routesOrdered = routesOrdered.sort(function (a, b) { return (a.duration - b.duration) * sortOrd; });
+                            break;
+                        case 4:
+                            routesOrdered = routesOrdered.sort(function (a, b) { return (a.maxSpeed - b.maxSpeed) * sortOrd; });
+                            break;
+                        case 5:
+                            routesOrdered = routesOrdered.sort(function (a, b) { return (a.avgSpeed - b.avgSpeed) * sortOrd; });
+                            break;
+                        case 6:
+                            routesOrdered = routesOrdered.sort(function (a, b) { return (a.minSpeed - b.minSpeed) * sortOrd; });
+                            break;
+                        case 7:
+                            routesOrdered = routesOrdered.sort(function (a, b) { return (a.statusId - b.statusId) * sortOrd; });
+                            break;
+                    }
+                }
+
+                updateTable();
+                updateGlobalData();
             }
 
             var imageWorkerStarted = false;
@@ -1266,11 +1459,11 @@
                 }
             }
 
-            $(window).on("beforeunload", function() {
+            $(window).on("beforeunload", function () {
                 db.close();
             });
 
-            $("#btnDeleteIDB").click(function() {
+            $("#btnDeleteIDB").click(function () {
                 var DBDeleteRequest = window.indexedDB.deleteDatabase("OCD");
 
                 DBDeleteRequest.onerror = function (event) {
@@ -1280,7 +1473,7 @@
                 DBDeleteRequest.onsuccess = function (event) {
                     console.log("Database deleted successfully");
                 };
-            })
+            });
 
             // ==== Graphs ====
 
@@ -1650,8 +1843,6 @@
                 $(this).attr("src", "/Assets/Custom/img/na.png");
             });
 
-
-
             $("#tblDrives tbody").on("click", "tr", function () {
                 $("#btnPause").click();
 
@@ -1662,7 +1853,9 @@
 
                 var route = routes[selectedDrive];
 
-                $("#playerPos").data("ionRangeSlider").update({
+                // Player
+
+                $("#posPlayer").data("ionRangeSlider").update({
                     from: +moment(route.data[0].date).format("X"),
 
                     min: +moment(route.data[0].date).format("X"),
@@ -1672,12 +1865,15 @@
                     from_max: +moment(route.data[route.statusId >= ROUTE_STATE_MAX_IMAGE_FOUND ? route.maxPicture : route.data.length - 1].date).format("X")
                 });
 
-                $("#gifPos").data("ionRangeSlider").update({
+                $("#posGif").data("ionRangeSlider").update({
                     from: +moment(route.data[0].date).format("X"),
+                    to: +moment(route.data[route.data.length - 1].date).format("X"),
 
                     min: +moment(route.data[0].date).format("X"),
                     max: +moment(route.data[route.data.length - 1].date).format("X")
                 });
+
+                // Drive Stat
 
                 let labelArr = [];
                 let speedArr = [];
@@ -1706,7 +1902,7 @@
             });
 
             let posTimeout = null;
-            $("#playerPos").on("change", function () {
+            $("#posPlayer").on("change", function () {
                 clearTimeout(posTimeout);
 
                 posTimeout = setTimeout(function () {
@@ -1716,13 +1912,13 @@
 
             $("#btnPrevImg").click(function () {
                 $("#btnPause").click();
-                $("#playerPos").data("ionRangeSlider").update({ from: +$("#playerPos").val() - 1 });
+                $("#posPlayer").data("ionRangeSlider").update({ from: +$("#posPlayer").val() - 1 });
                 updatePlayerPicture();
             });
 
             $("#btnNextImg").click(function () {
                 $("#btnPause").click();
-                $("#playerPos").data("ionRangeSlider").update({ from: +$("#playerPos").val() + 1 });
+                $("#posPlayer").data("ionRangeSlider").update({ from: +$("#posPlayer").val() + 1 });
                 updatePlayerPicture();
             });
 
@@ -1764,8 +1960,8 @@
             });
 
             function playStep() {
-                $("#playerPos").data("ionRangeSlider").update({ from: +$("#playerPos").val() + 1 });
-                if (lastPlay == $("#playerPos").val()) {
+                $("#posPlayer").data("ionRangeSlider").update({ from: +$("#posPlayer").val() + 1 });
+                if (lastPlay == $("#posPlayer").val()) {
                     $("#btnPause").click();
                     return;
                 }
@@ -1773,7 +1969,7 @@
 
                 updatePlayerPicture();
 
-                lastPlay = +$("#playerPos").val();
+                lastPlay = +$("#posPlayer").val();
 
                 let speed = 1000 / +$("#inpSpeed").val();
 
@@ -1791,7 +1987,7 @@
             let loaderTimeout = null;
 
             function updatePlayerPicture() {
-                let key = moment($("#playerPos").val(), "X").toISOString();
+                let key = moment($("#posPlayer").val(), "X").toISOString();
 
                 clearTimeout(loaderTimeout);
 
@@ -1804,7 +2000,7 @@
                 $("#playerImg").attr("src", getPictureUrl(routes[selectedDrive], routes[selectedDrive].dataByDate[key]));
 
                 for (let i = 1; i <= 3 + 2 * (+$("#inpSpeed").val()) ; i++) {
-                    let subKey = moment(+$("#playerPos").val() + i, "X").toISOString();
+                    let subKey = moment(+$("#posPlayer").val() + i, "X").toISOString();
                     if (typeof routes[selectedDrive].dataByDate[subKey] != "undefined") {
                         let img = new Image();
                         img.src = getPictureUrl(routes[selectedDrive], routes[selectedDrive].dataByDate[subKey]);
@@ -1822,11 +2018,11 @@
             // ==== Gif ====
 
             $("#btnSetGifStart").click(function () {
-                $("#gifPos").data("ionRangeSlider").update({ from: +$("#playerPos").val() });
+                $("#posGif").data("ionRangeSlider").update({ from: +$("#posPlayer").val() });
             });
 
             $("#btnSetGifEnd").click(function () {
-                $("#gifPos").data("ionRangeSlider").update({ to: +$("#playerPos").val() });
+                $("#posGif").data("ionRangeSlider").update({ to: +$("#posPlayer").val() });
             });
 
             $("#btnGifExportShow").click(function () {
@@ -1863,8 +2059,8 @@
                 gifExportData.quality = $("#inpGifQuality").val();
                 gifExportData.repeat = $("#inpGifRepeat").val();
 
-                gifExportData.start = moment.unix($("#gifPos").val().split(";")[0]).toISOString();
-                gifExportData.end = moment.unix($("#gifPos").val().split(";")[1]).toISOString();
+                gifExportData.start = moment.unix($("#posGif").val().split(";")[0]).toISOString();
+                gifExportData.end = moment.unix($("#posGif").val().split(";")[1]).toISOString();
 
                 gifExportData.start = gifExportData.route.dataByDate[gifExportData.start].secPos;
                 gifExportData.end = gifExportData.route.dataByDate[gifExportData.end].secPos;
@@ -1951,7 +2147,7 @@
                 gifExportData.gif.render();
             }
 
-            $("#btnGifDownload").click(function() {
+            $("#btnGifDownload").click(function () {
                 saveAs(gifExportData.gifBlob, "OCD-" + gifExportData.route.date.format("yyyy-MM-dd--HH-mm-ss") + ".gif");
             });
 
