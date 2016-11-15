@@ -2646,7 +2646,7 @@
 
 .hoverable {
   transition: box-shadow .55s;
-  box-shadow: 0;
+  box-shadow: none;
 }
 
 .hoverable:hover {
@@ -2881,7 +2881,7 @@ img {
 .pager .disabled > a,
 .pager .disabled > a:focus,
 .pager .disabled > a:hover {
-  background-color: inerhit !important;
+  background-color: inherit !important;
 }
 
 .modal-footer .btn + .btn {

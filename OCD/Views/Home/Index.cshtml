@@ -66,7 +66,7 @@
         }
 
         .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12 {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
 
@@ -96,11 +96,11 @@
                 table.table-fixedheader > thead {
                     overflow-y: scroll;
                 }
-
+                
                     table.table-fixedheader > thead::-webkit-scrollbar {
                         background-color: inherit;
                     }
-
+                    
 
                     table.table-fixedheader > thead > tr > th:after, table.table-fixedheader > tbody > tr > td:after {
                         content: ' ';
@@ -124,22 +124,22 @@
 
         /* Col : # */
         #tblDrives th:nth-child(1), #tblDrives td:nth-child(1) {
-            width: 3%;
+            width: 5%;
         }
 
         /* Col : Date */
         #tblDrives th:nth-child(2), #tblDrives td:nth-child(2) {
-            width: 21%;
+            width: 20%;
         }
 
         /* Col : Distance */
         #tblDrives th:nth-child(3), #tblDrives td:nth-child(3) {
-            width: 12%;
+            width: 11%;
         }
 
         /* Col : Time */
         #tblDrives th:nth-child(4), #tblDrives td:nth-child(4) {
-            width: 8%;
+            width: 10%;
         }
 
         /* Col : Max Speed */
@@ -159,7 +159,7 @@
 
         /* Col : Status */
         #tblDrives th:nth-child(8), #tblDrives td:nth-child(8) {
-            width: 14%;
+            width: 12%;
         }
 
 
@@ -188,6 +188,18 @@
 
         .clickable {
             cursor: pointer;
+        }
+
+        .sort-btn {
+            margin-top: 5px;
+        }
+
+        #tblDrives thead th {
+            cursor: pointer;
+        }
+
+        .selected-sort {
+            color: rgb(110, 201, 230)
         }
     </style>
 </head>
@@ -328,6 +340,7 @@
                                     <label for="inpParseWorker"># of Parsing Workers</label>
                                 </div>
                                 <button class="btn btn-info" id="btnCommaTokenModal">Comma Token</button>
+                                <button class="btn btn-info" id="btnDeleteIDB">DeleteIDB</button>
                             </div>
                         </div>
                     </div>
@@ -335,12 +348,56 @@
                 <!--/.Sidebar-->
                 <!--Main column-->
                 <div class="col-md-9">
-
-                    <!--First row-->
                     <div class="row">
+                        <div class="col-md-12" style="display: none;" id="alrtNoIndexedDB">
+                            <div class="alert alert-warning" role="alert">
+                                Your browser don't support IndexedDB. No route data will be able to be cached.
+                            </div>
+                        </div>
                         <div class="col-md-12">
                             <div class="divider-new">
                                 <h2 class="h2-responsive">Welcome to the Open Comma Dashboard</h2>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="card z-depth-2">
+                                <div class="card-header success-color white-text">
+                                    Filters
+                                </div>
+                                <div class="card-block">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <strong>Distance</strong>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <input type="text" id="posFilterDistance" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <strong>Duration</strong>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <input type="text" id="posFilterDuration" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-1">
+                                                    <strong>Date</strong>
+                                                </div>
+                                                <div class="col-md-11">
+                                                    <input type="text" id="posFilterDate" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -420,10 +477,10 @@
                                                 <span class="fa fa-fw fa-plus clickable" id="btnSpeedPlus"></span>
                                             </div>
                                             <br />
-                                            <input type="text" id="playerPos" />
+                                            <input type="text" id="posPlayer" />
                                             <hr />
                                             <h5>Gif export :</h5>
-                                            <input type="text" id="gifPos" />
+                                            <input type="text" id="posGif" />
                                             <br />
                                             <button class="btn btn-success" type="button" id="btnGifExportShow">Export</button>
                                         </div>
@@ -615,7 +672,7 @@
                             Result :
                         </div>
                         <div class="text-md-center">
-                            <img id="imgGifExportResult" style="max-width: 100%"/>
+                            <img id="imgGifExportResult" style="max-width: 100%" />
                         </div>
                         <div class="text-md-center">
                             <button type="button" class="btn btn-success" id="btnGifDownload">Download Gif (<span id="txtGifExportSize"></span> KiB)</button>
@@ -736,6 +793,10 @@
             return res;
         }
 
+        function getPictureUrl(route, dataPoint) {
+            return route.url + "/sec" + (dataPoint.secPos + 1) + ".jpg";
+        }
+
         // ==== Formating fct ====
 
         function formatDistance(value, sourceUnit) {
@@ -810,7 +871,9 @@
         $(function () {
             // Init
 
-            $("#playerPos").ionRangeSlider({
+            // Player
+
+            $("#posPlayer").ionRangeSlider({
                 grid: true,
                 prettify: function (num) {
                     return moment(num, "X").format("HH:mm:ss");
@@ -818,13 +881,47 @@
                 from_shadow: true
             });
 
-            $("#gifPos").ionRangeSlider({
+            $("#posGif").ionRangeSlider({
                 type: "double",
                 grid: true,
                 prettify: function (num) {
                     return moment(num, "X").format("HH:mm:ss");
                 },
                 from_shadow: true
+            });
+
+            // Filters
+            $("#posFilterDate").ionRangeSlider({
+                grid: true,
+                type: "double",
+                prettify: function (num) {
+                    return moment(num, "X").format("YYYY/MM/DD");
+                },
+                onFinish: function (data) {
+                    filterAndOrderTable();
+                }
+            });
+
+            $("#posFilterDistance").ionRangeSlider({
+                grid: true,
+                type: "double",
+                prettify: function (num) {
+                    return formatDistance(num, "m");
+                },
+                onFinish: function (data) {
+                    filterAndOrderTable();
+                }
+            });
+
+            $("#posFilterDuration").ionRangeSlider({
+                grid: true,
+                type: "double",
+                prettify: function (num) {
+                    return formatTime(num, "s");
+                },
+                onFinish: function (data) {
+                    filterAndOrderTable();
+                }
             });
 
             // unit
@@ -968,6 +1065,7 @@
 
                 history.replaceState(null, null, "/");
             }
+
             testCommaToken(function (result) {
                 if (!result) {
                     commaAuth(function (result) {
@@ -978,76 +1076,121 @@
                                 if (!result) {
                                     showAuthModal();
                                 } else
-                                    run();
+                                    loadDB();
                             });
                         }
                     });
                 }
                 else
-                    run();
+                    loadDB();
             });
 
-            var routeIndex = 0;
             var routeWorkers = [];
-            var routesKeys;
-            var routesKeysOrdered;
+            var routesProcessQueue;
+            var routesOrdered;
 
             function startRouteWorker(id, startCmd) {
-                let rtIndex = routeIndex--;
+                let workerRoute = routesProcessQueue.shift();
 
-
-                if (typeof routesKeys[rtIndex] !== "undefined") {
+                if (typeof workerRoute !== "undefined") {
                     var worker = new Worker('/Workers/RouteWorker.js');
 
                     routeWorkers[id] = worker;
 
-                    worker.postMessage({ cmd: "SetId", id: routes[routesKeys[rtIndex]].id });
+                    worker.postMessage({ cmd: "SetId", id: id });
 
                     worker.onmessage = function (event) {
                         switch (event.data.cmd) {
+                            case "echo":
+                                console.log(event.data.echo);
+                                break;
                             case "setState":
-                                routes[routesKeys[rtIndex]].status = event.data.state;
-                                routes[routesKeys[rtIndex]].statusId = event.data.id;
+                                workerRoute.status = event.data.state;
+                                workerRoute.statusId = event.data.id;
                                 updateTable();
                                 break;
                             case "setTime":
-                                routes[routesKeys[rtIndex]].execTime = event.data.time;
+                                workerRoute.execTime = event.data.time;
                                 break;
                             case "parsingDone":
-                                $.extend(routes[routesKeys[rtIndex]], event.data.obj);
+                                $.extend(workerRoute, event.data.obj);
                                 updateGlobalData();
                                 break;
                             case "maxPictureFound":
-                                routes[routesKeys[rtIndex]].maxPicture = event.data.obj;
+                                workerRoute.maxPicture = event.data.obj;
                                 updateGlobalData();
                                 break;
-                            case "done":
-                                rtIndex = routeIndex--;
+                            case "done": {
+                                // Saving
+                                let objectStore = db.transaction(['Drives'], "readwrite").objectStore('Drives');
 
-                                if (typeof routesKeys[rtIndex] !== "undefined") {
+                                let clone = $.extend(true, {}, workerRoute);
+
+                                delete clone.table;
+                                delete clone.date;
+
+                                objectStore.put(clone).onsuccess = function () {
+
+                                };
+
+                                workerRoute = routesProcessQueue.shift();
+
+                                if (typeof workerRoute !== "undefined") {
                                     worker.postMessage({
                                         cmd: startCmd,
-                                        url: routes[routesKeys[rtIndex]].url,
-                                        key: routesKeys[rtIndex],
-                                        pointCount: routes[routesKeys[rtIndex]].duration
+                                        url: workerRoute.url,
+                                        key: workerRoute.key,
+                                        pointCount: workerRoute.duration
                                     });
                                 } else {
                                     routeWorkers[id].terminate();
                                     testStartFindImageWorkers();
                                 }
                                 break;
+                            }
                         }
                     };
 
                     worker.postMessage({
                         cmd: startCmd,
-                        url: routes[routesKeys[rtIndex]].url,
-                        key: routesKeys[rtIndex],
-                        pointCount: routes[routesKeys[rtIndex]].duration
+                        url: workerRoute.url,
+                        key: workerRoute.key,
+                        pointCount: workerRoute.duration
                     });
+
+                    return true;
+                } else {
+                    updateTable();
+                    updateFilter();
+                    updateGlobalData();
+                    testStartFindImageWorkers();
+                    return false;
                 }
             }
 
+            var db = null;
+
+            function loadDB() {
+                if (!window.indexedDB) {
+                    $("#alrtNoIndexedDB").show();
+                    run();
+                    return;
+                }
+
+                var request = window.indexedDB.open("OCD", 1);
+
+                request.onupgradeneeded = function (event) {
+                    db = event.target.result;
+
+                    var objectStore = db.createObjectStore("Drives", { keyPath: "key" });
+                };
+
+                request.onsuccess = function (event) {
+                    db = event.target.result;
+
+                    run();
+                }
+            }
 
             function run() {
                 $("#txtCommaToken").text(localStorage.getItem("COD.CommaToken"));
@@ -1062,45 +1205,75 @@
                 loadEndPointJSON("me/routes/", function (data) {
                     routes = data.routes;
 
-                    routesKeys = [];
-                    routesKeysOrdered = [];
-
-
-                    let id = 0;
+                    routesOrdered = [];
+                    routesProcessQueue = [];
 
                     $.each(routes, function (index, value) {
-                        routesKeys.push(index);
-                        routesKeysOrdered.push(index);
                         value.status = "Queued";
                         value.statusId = -1;
-                        id++;
+                        value.key = index;
 
                         value.date = moment(index, "YYYY-MM-DD--HH-mm-ss");
                     });
 
-                    routesKeys = routesKeys.sort(function (a, b) { return (a.localeCompare(b)); });
-
-                    for (let i = 0; i < routesKeys.length; i++) {
-                        routes[routesKeys[i]].id = i;
-                    }
-
-                    routeIndex = routesKeys.length - 1;
-
-                    routesKeysOrdered = routesKeys.slice().sort(function (a, b) { return (a.localeCompare(b)) * -1; });
-
-                    updateTable();
 
 
-                    for (let i = 0; i < localStorage.getItem("workerNb") ; i++) {
-                        startRouteWorker(i, "ParseRoute");
-                    }
+                    var transaction = db.transaction('Drives', "readonly");
+                    var objectStore = transaction.objectStore('Drives');
+
+                    objectStore.openCursor().onsuccess = function (event) {
+                        var cursor = event.target.result;
+                        if (cursor) {
+                            let data = cursor.value;
+
+                            data.date = moment(data.key, "YYYY-MM-DD--HH-mm-ss");
+
+                            routes[data.key] = $.extend({}, data, routes[data.key]);
+
+                            routes[data.key].statusId = data.statusId;
+                            routes[data.key].status = data.status;
+
+                            cursor.continue();
+                        } else { // if no cursor => cursor ended
+
+                            $.each(routes, function (index, value) {
+                                routesOrdered.push(value);
+                                if (value.statusId == -1)
+                                    routesProcessQueue.push(value);
+                            });
+
+                            routesOrdered = routesOrdered.sort(function (a, b) { return a.key.localeCompare(b.key); });
+                            for (let i = 0; i < routesOrdered.length; i++) {
+                                routesOrdered[i].id = i;
+                            }
+
+                            routesOrdered = routesOrdered.sort(function (a, b) { return a.key.localeCompare(b.key) * -1; });
+
+                            routesProcessQueue = routesProcessQueue.sort(function (a, b) { return a.key.localeCompare(b.key) * -1; });
+
+                            updateFilter();
+
+                            updateTable();
+
+                            for (let i = 0; i < localStorage.getItem("workerNb") ; i++) {
+                                let startResult = startRouteWorker(i, "ParseRoute");
+
+                                if (!startResult)
+                                    break;
+                            }
+                        }
+                    };
+
                 });
             }
+
+            var sortCol = 0;
+            var sortOrd = -1;
 
             function updateTable() {
 
                 var doneRoutes = 0;
-                var totRoutes = routesKeys.length;
+                var totRoutes = routesOrdered.length;
 
                 $.each(routes, function (index, value) {
                     if (value.statusId >= ROUTE_STATE_PARSING_DONE)
@@ -1118,10 +1291,10 @@
 
 
                 if ($("#tblDrives tbody").children().length == 0) {
-                    for (let i = 0; i < routesKeysOrdered.length; i++) {
-                        let route = routes[routesKeysOrdered[i]];
+                    for (let i = 0; i < routesOrdered.length; i++) {
+                        let route = routesOrdered[i];
 
-                        let tr = $('<tr routeId="' + route.id + '">' +
+                        let tr = $('<tr routeKey="' + route.key + '">' +
                                                         '<td></td>' +
                                                         '<td></td>' +
                                                         '<td></td>' +
@@ -1147,8 +1320,8 @@
                     }
                 }
 
-                for (let i = 0; i < routesKeysOrdered.length; i++) {
-                    let route = routes[routesKeysOrdered[i]];
+                for (let i = 0; i < routesOrdered.length; i++) {
+                    let route = routesOrdered[i];
 
                     route.table.tr.toggleClass("text-muted", route.statusId < ROUTE_STATE_PARSING_DONE);
 
@@ -1162,7 +1335,218 @@
                     route.table.minSpeed.text(route.statusId >= ROUTE_STATE_PARSING_DONE ? formatSpeed(route.minSpeed, "m/s") : "-");
                     route.table.status.text(route.status);
                 };
+
             }
+
+            // Table Filter
+            function updateFilter() {
+
+                let distanceMin = Number.MAX_VALUE;
+                let distanceMax = 0;
+
+                let durationMin = Number.MAX_VALUE;
+                let durationMax = 0;
+
+                let dateMin = Number.MAX_VALUE;
+                let dateMax = 0;
+
+                $.each(routes, function (index, value) {
+                    let duration = moment(value.end_time, "YYYY-MM-DD--HH-mm-ss").diff(moment(value.start_time, "YYYY-MM-DD--HH-mm-ss")) / 1000;
+                    let date = moment(value.start_time, "YYYY-MM-DD--HH-mm-ss").format("X");
+
+                    if (value.len < distanceMin)
+                        distanceMin = value.len;
+
+                    if (value.len > distanceMax)
+                        distanceMax = value.len;
+
+
+                    if (duration < durationMin)
+                        durationMin = duration;
+
+                    if (duration > durationMax)
+                        durationMax = duration;
+
+
+                    if (date < dateMin)
+                        dateMin = date;
+
+                    if (date > dateMax)
+                        dateMax = date;
+                });
+
+                $("#posFilterDistance").data("ionRangeSlider").update({
+                    min: distanceMin,
+                    from: distanceMin,
+                    to: distanceMax,
+                    max: distanceMax
+                });
+
+                $("#posFilterDuration").data("ionRangeSlider").update({
+                    min: durationMin,
+                    from: durationMin,
+                    to: durationMax,
+                    max: durationMax
+                });
+
+                $("#posFilterDate").data("ionRangeSlider").update({
+                    min: dateMin,
+                    from: dateMin,
+                    to: dateMax,
+                    max: dateMax
+                });
+            }
+
+
+
+            // Table Sort
+            $("#tblDrives thead th").each(function() {
+                $(this).append('<span class="fa fa-fw fa-sort pull-right sort-btn"></span>');
+            });
+
+            $("#tblDrives thead th:first-child span").removeClass("fa-sort").addClass("fa-sort-desc");
+
+            $("#tblDrives thead th").on("click", function() {
+                let item = $(this).find(".sort-btn");
+                let idx = item.parents("th").first().index();
+                if (item.hasClass("fa-sort")) {
+                    $(".selected-sort").removeClass("fa-sort-asc fa-sort-desc selected-sort").addClass("fa-sort");
+
+                    item.removeClass("fa-sort").addClass("fa-sort-asc selected-sort");
+
+                    sortCol = idx;
+                    sortOrd = 1;
+                } else if (item.hasClass("fa-sort-asc")) {
+                    item.removeClass("fa-sort-asc").addClass("fa-sort-desc selected-sort");
+
+                    sortCol = idx;
+                    sortOrd = -1;
+                } else if (item.hasClass("fa-sort-desc")) {
+                    item.removeClass("fa-sort-desc").addClass("fa-sort-asc selected-sort");
+
+                    sortCol = idx;
+                    sortOrd = 1;
+                }
+
+                filterAndOrderTable();
+            });
+
+            function filterAndOrderTable() {
+                $("#tblDrives tbody").empty();
+
+                routesOrdered = [];
+
+                // Filter
+
+                let distanceMin = +($("#posFilterDistance").val().split(";")[0]);
+                let distanceMax = +($("#posFilterDistance").val().split(";")[1]);
+
+                let durationMin = +($("#posFilterDuration").val().split(";")[0]);
+                let durationMax = +($("#posFilterDuration").val().split(";")[2]);
+
+                let dateMin = +($("#posFilterDate").val().split(";")[0]);
+                let dateMax = +($("#posFilterDate").val().split(";")[1]);
+
+                $.each(routes, function (index, value) {
+                    let duration = moment(value.end_time, "YYYY-MM-DD--HH-mm-ss").diff(moment(value.start_time, "YYYY-MM-DD--HH-mm-ss")) / 1000;
+                    let date = moment(value.start_time, "YYYY-MM-DD--HH-mm-ss").format("X");
+
+                    if (distanceMin > value.len || distanceMax < value.len)
+                        return;
+
+                    if (durationMin > duration || durationMax < duration)
+                        return;
+
+                    if (dateMin > date || dateMax < date)
+                        return;
+
+                    routesOrdered.push(value);
+                });
+
+                // Order
+
+                if (sortCol !== -1) {
+                    switch(sortCol) {
+                        case 0:
+                            routesOrdered = routesOrdered.sort(function (a, b) { return (a.id - b.id) * sortOrd; });
+                            break;
+                        case 1:
+                            routesOrdered = routesOrdered.sort(function (a, b) { return (a.key.localeCompare(b.key)) * sortOrd; });
+                            break;
+                        case 2:
+                            routesOrdered = routesOrdered.sort(function (a, b) { return (a.totalDist - b.totalDist) * sortOrd; });
+                            break;
+                        case 3:
+                            routesOrdered = routesOrdered.sort(function (a, b) { return (a.duration - b.duration) * sortOrd; });
+                            break;
+                        case 4:
+                            routesOrdered = routesOrdered.sort(function (a, b) { return (a.maxSpeed - b.maxSpeed) * sortOrd; });
+                            break;
+                        case 5:
+                            routesOrdered = routesOrdered.sort(function (a, b) { return (a.avgSpeed - b.avgSpeed) * sortOrd; });
+                            break;
+                        case 6:
+                            routesOrdered = routesOrdered.sort(function (a, b) { return (a.minSpeed - b.minSpeed) * sortOrd; });
+                            break;
+                        case 7:
+                            routesOrdered = routesOrdered.sort(function (a, b) { return (a.statusId - b.statusId) * sortOrd; });
+                            break;
+                    }
+                }
+
+                updateTable();
+                updateGlobalData();
+            }
+
+            var imageWorkerStarted = false;
+
+            function testStartFindImageWorkers() {
+                if (imageWorkerStarted)
+                    return;
+
+                var doneRoutes = 0;
+                var totRoutes = routesOrdered.length;
+
+                $.each(routes, function (index, value) {
+                    if (value.statusId >= ROUTE_STATE_PARSING_DONE)
+                        doneRoutes++;
+                });
+
+                if (doneRoutes == totRoutes) {
+                    imageWorkerStarted = true;
+
+                    $.each(routes, function (index, value) {
+                        if (value.statusId != 7)
+                            routesProcessQueue.push(value);
+                    });
+
+                    routesProcessQueue = routesProcessQueue.sort(function (a, b) { return a.key.localeCompare(b.key) * -1; });
+
+                    for (let i = 0; i < localStorage.getItem("workerNb") ; i++) {
+                        let startResult = startRouteWorker(i, "FindMaxPicture");
+
+                        if (!startResult)
+                            break;
+                    }
+
+                }
+            }
+
+            $(window).on("beforeunload", function () {
+                db.close();
+            });
+
+            $("#btnDeleteIDB").click(function () {
+                var DBDeleteRequest = window.indexedDB.deleteDatabase("OCD");
+
+                DBDeleteRequest.onerror = function (event) {
+                    console.log("Error deleting database.");
+                };
+
+                DBDeleteRequest.onsuccess = function (event) {
+                    console.log("Database deleted successfully");
+                };
+            });
 
             // ==== Graphs ====
 
@@ -1409,7 +1793,7 @@
 
             function updateGlobalData() {
                 var doneRoutes = 0;
-                var totRoutes = routesKeys.length;
+                var totRoutes = routesOrdered.length;
 
 
                 var totalDist = 0;
@@ -1500,18 +1884,18 @@
                 let graphDuration = [];
                 let graphDistance = [];
 
-                for (let i = 0; i < routesKeysOrdered.length; i++) {
-                    if (routes[routesKeysOrdered[i]].statusId < ROUTE_STATE_PARSING_DONE)
+                for (let i = 0; i < routesOrdered.length; i++) {
+                    if (routesOrdered[i].statusId < ROUTE_STATE_PARSING_DONE)
                         continue;
 
-                    graphSpeedLabels.push(routes[routesKeysOrdered[i]].startDate);
+                    graphSpeedLabels.push(routesOrdered[i].startDate);
 
-                    graphSpeedMax.push(formatSpeedNoUnit(routes[routesKeysOrdered[i]].maxSpeed, "m/s"));
-                    graphSpeedAvg.push(formatSpeedNoUnit(routes[routesKeysOrdered[i]].avgSpeed, "m/s"));
+                    graphSpeedMax.push(formatSpeedNoUnit(routesOrdered[i].maxSpeed, "m/s"));
+                    graphSpeedAvg.push(formatSpeedNoUnit(routesOrdered[i].avgSpeed, "m/s"));
 
-                    graphDuration.push(formatTimeNoUnit(routes[routesKeysOrdered[i]].duration, "s"));
+                    graphDuration.push(formatTimeNoUnit(routesOrdered[i].duration, "s"));
 
-                    graphDistance.push(formatDistanceNoUnit(routes[routesKeysOrdered[i]].totalDist, "mi"));
+                    graphDistance.push(formatDistanceNoUnit(routesOrdered[i].totalDist, "mi"));
 
                 }
 
@@ -1525,38 +1909,12 @@
                 chrtGlobalSpeed.update(doneRoutes == totRoutes ? 1000 : 0);
             }
 
-            var imageWorkerStarted = false;
-
-            function testStartFindImageWorkers() {
-                if (imageWorkerStarted)
-                    return;
-
-                var doneRoutes = 0;
-                var totRoutes = routesKeys.length;
-
-                $.each(routes, function (index, value) {
-                    if (value.statusId >= ROUTE_STATE_PARSING_DONE)
-                        doneRoutes++;
-                });
-
-                if (doneRoutes == totRoutes) {
-                    imageWorkerStarted = true;
-                    routeIndex = routesKeys.length - 1;
-                    for (let i = 0; i < localStorage.getItem("workerNb") ; i++) {
-                        startRouteWorker(i, "FindMaxPicture");
-                    }
-
-                }
-            }
-
             // ==== drive selection ====
-            var selectedDrive = -1;
+            var selectedDrive = "";
 
             $("#playerImg").on("error", function () {
                 $(this).attr("src", "/Assets/Custom/img/na.png");
             });
-
-
 
             $("#tblDrives tbody").on("click", "tr", function () {
                 $("#btnPause").click();
@@ -1564,11 +1922,13 @@
                 $("#tblDrives tbody tr").removeClass("table-danger");
                 $(this).addClass("table-danger");
 
-                selectedDrive = $(this).attr("routeId");
+                selectedDrive = $(this).attr("routeKey");
 
-                var route = routes[routesKeys[selectedDrive]];
+                var route = routes[selectedDrive];
 
-                $("#playerPos").data("ionRangeSlider").update({
+                // Player
+
+                $("#posPlayer").data("ionRangeSlider").update({
                     from: +moment(route.data[0].date).format("X"),
 
                     min: +moment(route.data[0].date).format("X"),
@@ -1578,12 +1938,15 @@
                     from_max: +moment(route.data[route.statusId >= ROUTE_STATE_MAX_IMAGE_FOUND ? route.maxPicture : route.data.length - 1].date).format("X")
                 });
 
-                $("#gifPos").data("ionRangeSlider").update({
+                $("#posGif").data("ionRangeSlider").update({
                     from: +moment(route.data[0].date).format("X"),
+                    to: +moment(route.data[route.data.length - 1].date).format("X"),
 
                     min: +moment(route.data[0].date).format("X"),
                     max: +moment(route.data[route.data.length - 1].date).format("X")
                 });
+
+                // Drive Stat
 
                 let labelArr = [];
                 let speedArr = [];
@@ -1612,7 +1975,7 @@
             });
 
             let posTimeout = null;
-            $("#playerPos").on("change", function () {
+            $("#posPlayer").on("change", function () {
                 clearTimeout(posTimeout);
 
                 posTimeout = setTimeout(function () {
@@ -1622,13 +1985,13 @@
 
             $("#btnPrevImg").click(function () {
                 $("#btnPause").click();
-                $("#playerPos").data("ionRangeSlider").update({ from: +$("#playerPos").val() - 1 });
+                $("#posPlayer").data("ionRangeSlider").update({ from: +$("#posPlayer").val() - 1 });
                 updatePlayerPicture();
             });
 
             $("#btnNextImg").click(function () {
                 $("#btnPause").click();
-                $("#playerPos").data("ionRangeSlider").update({ from: +$("#playerPos").val() + 1 });
+                $("#posPlayer").data("ionRangeSlider").update({ from: +$("#posPlayer").val() + 1 });
                 updatePlayerPicture();
             });
 
@@ -1670,8 +2033,8 @@
             });
 
             function playStep() {
-                $("#playerPos").data("ionRangeSlider").update({ from: +$("#playerPos").val() + 1 });
-                if (lastPlay == $("#playerPos").val()) {
+                $("#posPlayer").data("ionRangeSlider").update({ from: +$("#posPlayer").val() + 1 });
+                if (lastPlay == $("#posPlayer").val()) {
                     $("#btnPause").click();
                     return;
                 }
@@ -1679,7 +2042,7 @@
 
                 updatePlayerPicture();
 
-                lastPlay = +$("#playerPos").val();
+                lastPlay = +$("#posPlayer").val();
 
                 let speed = 1000 / +$("#inpSpeed").val();
 
@@ -1697,7 +2060,7 @@
             let loaderTimeout = null;
 
             function updatePlayerPicture() {
-                let key = moment($("#playerPos").val(), "X").toISOString();
+                let key = moment($("#posPlayer").val(), "X").toISOString();
 
                 clearTimeout(loaderTimeout);
 
@@ -1707,13 +2070,13 @@
 
 
 
-                $("#playerImg").attr("src", routes[routesKeys[selectedDrive]].dataByDate[key].pictureURL);
+                $("#playerImg").attr("src", getPictureUrl(routes[selectedDrive], routes[selectedDrive].dataByDate[key]));
 
                 for (let i = 1; i <= 3 + 2 * (+$("#inpSpeed").val()) ; i++) {
-                    let subKey = moment(+$("#playerPos").val() + i, "X").toISOString();
-                    if (typeof routes[routesKeys[selectedDrive]].dataByDate[subKey] != "undefined") {
+                    let subKey = moment(+$("#posPlayer").val() + i, "X").toISOString();
+                    if (typeof routes[selectedDrive].dataByDate[subKey] != "undefined") {
                         let img = new Image();
-                        img.src = routes[routesKeys[selectedDrive]].dataByDate[subKey].pictureURL;
+                        img.src = getPictureUrl(routes[selectedDrive], routes[selectedDrive].dataByDate[subKey]);
 
                     }
                 }
@@ -1728,11 +2091,11 @@
             // ==== Gif ====
 
             $("#btnSetGifStart").click(function () {
-                $("#gifPos").data("ionRangeSlider").update({ from: +$("#playerPos").val() });
+                $("#posGif").data("ionRangeSlider").update({ from: +$("#posPlayer").val() });
             });
 
             $("#btnSetGifEnd").click(function () {
-                $("#gifPos").data("ionRangeSlider").update({ to: +$("#playerPos").val() });
+                $("#posGif").data("ionRangeSlider").update({ to: +$("#posPlayer").val() });
             });
 
             $("#btnGifExportShow").click(function () {
@@ -1760,7 +2123,7 @@
             $("#btnGifStartExport").click(function () {
                 $("#gifResultZone").hide();
                 gifExportData.imagesForExport = [];
-                gifExportData.route = routes[routesKeys[selectedDrive]];
+                gifExportData.route = routes[selectedDrive];
 
                 gifExportData.width = $("#inpGifWidth").val();
                 gifExportData.height = $("#inpGifHeight").val();
@@ -1769,8 +2132,8 @@
                 gifExportData.quality = $("#inpGifQuality").val();
                 gifExportData.repeat = $("#inpGifRepeat").val();
 
-                gifExportData.start = moment.unix($("#gifPos").val().split(";")[0]).toISOString();
-                gifExportData.end = moment.unix($("#gifPos").val().split(";")[1]).toISOString();
+                gifExportData.start = moment.unix($("#posGif").val().split(";")[0]).toISOString();
+                gifExportData.end = moment.unix($("#posGif").val().split(";")[1]).toISOString();
 
                 gifExportData.start = gifExportData.route.dataByDate[gifExportData.start].secPos;
                 gifExportData.end = gifExportData.route.dataByDate[gifExportData.end].secPos;
@@ -1803,7 +2166,7 @@
                     downloadGifImages();
                 }, false);
 
-                image.src = gifExportData.route.data[gifExportData.currentPos].pictureURL;
+                image.src = getPictureUrl(gifExportData.route, gifExportData.route.data[gifExportData.currentPos]);
             }
 
             function generateGif() {
@@ -1857,7 +2220,7 @@
                 gifExportData.gif.render();
             }
 
-            $("#btnGifDownload").click(function() {
+            $("#btnGifDownload").click(function () {
                 saveAs(gifExportData.gifBlob, "OCD-" + gifExportData.route.date.format("yyyy-MM-dd--HH-mm-ss") + ".gif");
             });
 

@@ -94,7 +94,6 @@ function processRoute(url) {
         for (let i = 0; i < retObj.data.length; i++) {
             let point = retObj.data[i];
             point.secPos = i;
-            point.pictureURL = url + "/sec" + (point.secPos + 1) + ".jpg";
 
             retObj.avgSpeed += point.speed;
 
@@ -138,6 +137,9 @@ function findMaxPicture(url, pointcount) {
     // Step 1 : go down 10 by 10
     var aproxId = -1;
     var exit = false;
+
+    
+
     for (let i = pointcount; i > 0 ; i -= 20) {
         ajax(url + "/sec" + i + ".jpg", null, function (resp, code) {
             if (code != 403) {
@@ -149,21 +151,29 @@ function findMaxPicture(url, pointcount) {
             break;
     }
 
+    if (aproxId <= 0)
+        aproxId = 1;
+
     // Step 2 : go back up
-    exit = false;
-    for (let i = aproxId; i <= pointcount ; i++) {
-        ajax(url + "/sec" + i + ".jpg", null, function (resp, code) {
-            if (code !== 200) {
-                aproxId = i - 2;
-                exit = true;
-            }
-        }, "GET", false);
-        if (exit)
-            break;
+    if (aproxId == pointcount) {
+        aproxId = aproxId - 1;
+    }
+    else {
+        exit = false;
+        for (let i = aproxId; i <= pointcount ; i++) {
+            ajax(url + "/sec" + i + ".jpg", null, function (resp, code) {
+                if (code !== 200) {
+                    aproxId = i - 2;
+                    exit = true;
+                }
+            }, "GET", false);
+            if (exit)
+                break;
+        }
     }
 
-
-    
+    if (aproxId <= 0)
+        aproxId = 1;
 
     self.postMessage({ cmd: "maxPictureFound", id: id, key: key, obj: aproxId });
 
