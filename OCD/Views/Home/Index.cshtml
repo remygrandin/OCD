@@ -66,7 +66,7 @@
         }
 
         .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12 {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
 
@@ -477,10 +477,10 @@
                                                 <span class="fa fa-fw fa-plus clickable" id="btnSpeedPlus"></span>
                                             </div>
                                             <br />
-                                            <input type="text" id="playerPos" />
+                                            <input type="text" id="posPlayer" />
                                             <hr />
                                             <h5>Gif export :</h5>
-                                            <input type="text" id="gifPos" />
+                                            <input type="text" id="posGif" />
                                             <br />
                                             <button class="btn btn-success" type="button" id="btnGifExportShow">Export</button>
                                         </div>
@@ -895,7 +895,10 @@
                 grid: true,
                 type: "double",
                 prettify: function (num) {
-                    return moment(num, "X").format("yyyy/MM/dd");
+                    return moment(num, "X").format("YYYY/MM/DD");
+                },
+                onFinish: function (data) {
+                    filterAndOrderTable();
                 }
             });
 
@@ -904,6 +907,9 @@
                 type: "double",
                 prettify: function (num) {
                     return formatDistance(num, "m");
+                },
+                onFinish: function (data) {
+                    filterAndOrderTable();
                 }
             });
 
@@ -912,6 +918,9 @@
                 type: "double",
                 prettify: function (num) {
                     return formatTime(num, "s");
+                },
+                onFinish: function (data) {
+                    filterAndOrderTable();
                 }
             });
 
@@ -1106,7 +1115,6 @@
                             case "parsingDone":
                                 $.extend(workerRoute, event.data.obj);
                                 updateGlobalData();
-                                updateFilter();
                                 break;
                             case "maxPictureFound":
                                 workerRoute.maxPicture = event.data.obj;
@@ -1243,6 +1251,8 @@
 
                             routesProcessQueue = routesProcessQueue.sort(function (a, b) { return a.key.localeCompare(b.key) * -1; });
 
+                            updateFilter();
+
                             updateTable();
 
                             for (let i = 0; i < localStorage.getItem("workerNb") ; i++) {
@@ -1257,8 +1267,8 @@
                 });
             }
 
-            var sortCol = -1;
-            var sortOrd = 1;
+            var sortCol = 0;
+            var sortOrd = -1;
 
             function updateTable() {
 
@@ -1334,9 +1344,16 @@
                 let distanceMin = Number.MAX_VALUE;
                 let distanceMax = 0;
 
+                let durationMin = Number.MAX_VALUE;
+                let durationMax = 0;
 
+                let dateMin = Number.MAX_VALUE;
+                let dateMax = 0;
 
-                $.each(routes, function(index, value) {
+                $.each(routes, function (index, value) {
+                    let duration = moment(value.end_time, "YYYY-MM-DD--HH-mm-ss").diff(moment(value.start_time, "YYYY-MM-DD--HH-mm-ss")) / 1000;
+                    let date = moment(value.start_time, "YYYY-MM-DD--HH-mm-ss").format("X");
+
                     if (value.len < distanceMin)
                         distanceMin = value.len;
 
@@ -1344,20 +1361,50 @@
                         distanceMax = value.len;
 
 
+                    if (duration < durationMin)
+                        durationMin = duration;
+
+                    if (duration > durationMax)
+                        durationMax = duration;
+
+
+                    if (date < dateMin)
+                        dateMin = date;
+
+                    if (date > dateMax)
+                        dateMax = date;
                 });
 
                 $("#posFilterDistance").data("ionRangeSlider").update({
-
                     min: distanceMin,
+                    from: distanceMin,
+                    to: distanceMax,
                     max: distanceMax
+                });
 
+                $("#posFilterDuration").data("ionRangeSlider").update({
+                    min: durationMin,
+                    from: durationMin,
+                    to: durationMax,
+                    max: durationMax
+                });
+
+                $("#posFilterDate").data("ionRangeSlider").update({
+                    min: dateMin,
+                    from: dateMin,
+                    to: dateMax,
+                    max: dateMax
                 });
             }
+
+
 
             // Table Sort
             $("#tblDrives thead th").each(function() {
                 $(this).append('<span class="fa fa-fw fa-sort pull-right sort-btn"></span>');
             });
+
+            $("#tblDrives thead th:first-child span").removeClass("fa-sort").addClass("fa-sort-desc");
 
             $("#tblDrives thead th").on("click", function() {
                 let item = $(this).find(".sort-btn");
@@ -1375,9 +1422,9 @@
                     sortCol = idx;
                     sortOrd = -1;
                 } else if (item.hasClass("fa-sort-desc")) {
-                    item.removeClass("fa-sort-desc  selected-sort").addClass("fa-sort");
+                    item.removeClass("fa-sort-desc").addClass("fa-sort-asc selected-sort");
 
-                    sortCol = -1;
+                    sortCol = idx;
                     sortOrd = 1;
                 }
 
@@ -1391,7 +1438,28 @@
 
                 // Filter
 
-                $.each(routes, function(index, value) {
+                let distanceMin = +($("#posFilterDistance").val().split(";")[0]);
+                let distanceMax = +($("#posFilterDistance").val().split(";")[1]);
+
+                let durationMin = +($("#posFilterDuration").val().split(";")[0]);
+                let durationMax = +($("#posFilterDuration").val().split(";")[2]);
+
+                let dateMin = +($("#posFilterDate").val().split(";")[0]);
+                let dateMax = +($("#posFilterDate").val().split(";")[1]);
+
+                $.each(routes, function (index, value) {
+                    let duration = moment(value.end_time, "YYYY-MM-DD--HH-mm-ss").diff(moment(value.start_time, "YYYY-MM-DD--HH-mm-ss")) / 1000;
+                    let date = moment(value.start_time, "YYYY-MM-DD--HH-mm-ss").format("X");
+
+                    if (distanceMin > value.len || distanceMax < value.len)
+                        return;
+
+                    if (durationMin > duration || durationMax < duration)
+                        return;
+
+                    if (dateMin > date || dateMax < date)
+                        return;
+
                     routesOrdered.push(value);
                 });
 
